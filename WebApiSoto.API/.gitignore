@@ -1,0 +1,36 @@
+## Al inicio: Ignorar el archivo de configuración de desarrollo específico
+appsettings.Development.json
+
+## Visual Studio - Archivos de compilación y temporales
+bin/
+obj/
+out/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+bld/
+[Log]s/
+[Tt]est[Rr]esults/
+
+## Archivos de usuario y caché de Visual Studio
+*.user
+*.userosscache
+*.sln.docstates
+.vs/
+
+## Herramientas de .NET (Entity Framework, Secretos, etc.)
+*.db
+*.db-shm
+*.db-wal
+.utests/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+## Archivos de sistema y otros editores
+.vscode/
+.idea/
+.DS_Store
+thumbs.db
+desktop.ini

@@ -1,0 +1,18 @@
+# === Configuraciones Sensibles (Lo que pediste) ===
+appsettings.json
+appsettings.Development.json
+
+
+# === Archivos de Usuario y Secretos ===
+*.user
+*.userosscache
+*.sln.docstates
+secrets.json
+
+# === .NET / Visual Studio (Basura que se regenera) ===
+bin/
+obj/
+[Buffer]/
+.vs/
+.vscode/
+
