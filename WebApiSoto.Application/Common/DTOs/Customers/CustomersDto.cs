@@ -9,7 +9,7 @@ namespace WebApiSoto.Application.Common.DTOs.Customers
     public class CustomersDto
     {
         public int CustomerId { get; set; }
-        public int DNI { get; set; }
+        public int Cedula { get; set; }
         public string CustomerName { get; set; }
         public string CustomerAddress { get; set; }
         public string City { get; set; }

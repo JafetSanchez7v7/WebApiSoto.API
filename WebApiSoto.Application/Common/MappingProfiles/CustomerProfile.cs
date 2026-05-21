@@ -15,7 +15,10 @@ namespace WebApiSoto.Application.Common.MappingProfiles
         {
             CreateMap<Customers, CustomersDto>().ReverseMap();
             CreateMap<CreateCustomerDto, Customers>().ForMember(src => src.CustomerId, opt => opt.Ignore()).
-                ForMember(src => src.IsActive, opt => opt.MapFrom(src=> true));
+                ForMember(src => src.IsActive, opt => opt.MapFrom(src=> true)
+                ).ForMember(dest=> dest.CustomerAddress, opt=> opt.MapFrom(src=> src.Address)).
+                ForMember(src=> src.CustomerName, opt=> opt.MapFrom(src=>src.Address))
+                .ForMember(src=> src.Cedula, opt=> opt.MapFrom(src=> src.DNI));
         }
     }
 }

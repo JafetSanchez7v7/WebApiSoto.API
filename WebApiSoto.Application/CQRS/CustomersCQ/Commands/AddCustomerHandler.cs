@@ -23,7 +23,8 @@ namespace WebApiSoto.Application.CQRS.CustomersCQ.Commands
                 return Result<CustomersDto>.Failure(false, "El nombre de este usuario ya existe", 409);
             var mapped = mapper.Map<Customers>(request.dto);
             var newCustomer = context.Customers.AddAsync( mapped, ct);
-            return Result<CustomersDto>.Success(mapper.Map<CustomersDto>(newCustomer), 201);
+            var response = mapper.Map<CustomersDto>(newCustomer);
+            return Result<CustomersDto>.Success(response, 201);
         }
     }
     
