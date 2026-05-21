@@ -23,7 +23,7 @@ namespace WebApiSoto.Infrastructure.Context
 
         public DbSet<Users> Users { get; set; }
         public DbSet<Categories> Categories { get; set; }
-        public DbSet<Supplier> Suppliers { get; set; }
+        public DbSet<Suppliers> Suppliers { get; set; }
         public DbSet<Products> Products { get; set; }
         public DbSet<Customers> Customers { get; set; }
 
@@ -31,7 +31,7 @@ namespace WebApiSoto.Infrastructure.Context
         {
             modelBuilder.Entity<Users>(cfg => cfg.HasKey(src => src.UserId));
             modelBuilder.Entity<Categories>(cfg => cfg.HasKey(src => src.Id));
-            modelBuilder.Entity<Supplier>(cfg => cfg.HasKey(src => src.SupplierId));
+            modelBuilder.Entity<Suppliers>(cfg => cfg.HasKey(src => src.SupplierId));
             modelBuilder.Entity<Products>(cfg => cfg.HasKey(src => src.ProductId));
             modelBuilder.Entity<Customers>(cfg => cfg.HasKey(src => src.CustomerId));   
         }

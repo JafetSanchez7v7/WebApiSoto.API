@@ -20,7 +20,7 @@ namespace WebApiSoto.Infrastructure.Repositories
             _context = con;
         }
 
-        public async Task<IEnumerable<Supplier>> GetSuppliersAsync(FiltersDto dto, CancellationToken ct)
+        public async Task<IEnumerable<Suppliers>> GetSuppliersAsync(FiltersDto dto, CancellationToken ct)
         {
             var query = _context.Suppliers.AsNoTracking().AsQueryable();
 
@@ -41,26 +41,26 @@ namespace WebApiSoto.Infrastructure.Repositories
             return response;
         }
 
-        public async Task<Supplier?> GetByIdAsync(int id, CancellationToken ct)
+        public async Task<Suppliers?> GetByIdAsync(int id, CancellationToken ct)
         {
             return await _context.Suppliers
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.SupplierId == id, ct);
         }
 
-        public async Task<Supplier?> GetByNameAsync(string name, CancellationToken ct)
+        public async Task<Suppliers?> GetByNameAsync(string name, CancellationToken ct)
         {
             return await _context.Suppliers
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Name == name, ct);
         }
 
-        public async Task<Supplier?> GetToUpdateAsync(int id, CancellationToken ct)
+        public async Task<Suppliers?> GetToUpdateAsync(int id, CancellationToken ct)
         {
             return await _context.Suppliers.FirstOrDefaultAsync(x => x.SupplierId == id, ct);
         }
 
-        public async Task<Supplier> AddAsync(Supplier supplier, CancellationToken ct)
+        public async Task<Suppliers> AddAsync(Suppliers supplier, CancellationToken ct)
         {
             var entry = await _context.Suppliers.AddAsync(supplier, ct);
             return entry.Entity;

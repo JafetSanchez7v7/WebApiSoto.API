@@ -14,9 +14,9 @@ namespace WebApiSoto.Application.Common.MappingProfiles
     {
         public SupplierProfile()
         {
-            CreateMap<Supplier, SupplierDto>().ReverseMap();
-            CreateMap<CreateSupplierDto, Supplier>().ForMember(dest => dest.SupplierId, opt => opt.Ignore());
-            CreateMap<UpdateSupplierDto, Supplier>().ForMember(dest => dest.SupplierId, opt => opt.Ignore());
+            CreateMap<Suppliers, SupplierDto>().ReverseMap();
+            CreateMap<CreateSupplierDto, Suppliers>().ForMember(dest => dest.SupplierId, opt => opt.Ignore());
+            CreateMap<UpdateSupplierDto, Suppliers>().ForMember(dest => dest.SupplierId, opt => opt.Ignore());
         }
     }
 }

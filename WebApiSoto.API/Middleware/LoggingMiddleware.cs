@@ -1,4 +1,6 @@
-﻿namespace WebApiSoto.API.Middleware
+﻿using WebApiSoto.API.Middleware.Exceptions;
+
+namespace WebApiSoto.API.Middleware
 {
     public class LoggingMiddleware(ILogger<LoggingMiddleware> logger, RequestDelegate next)
     {
@@ -7,6 +9,13 @@
             try
             {
                 await next(context);
+            }
+            catch (ApiException ex)
+            {
+                logger.LogWarning("Ha Ocurrido un error de persistencia");
+                context.Response.StatusCode = ex.StatusCode;
+                await context.Response.WriteAsync(ex.Message);
+               
             }
             catch(Exception ex)
             {

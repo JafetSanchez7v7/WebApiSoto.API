@@ -11,6 +11,7 @@ using WebApiSoto.API.Middleware;
 using WebApiSoto.Application.DependencyInjection;
 using WebApiSoto.Application.Interfaces;
 using WebApiSoto.Infrastructure.Context;
+using WebApiSoto.Infrastructure.DbTrigger;
 using WebApiSoto.Infrastructure.DependencyInjection;
 using WebApiSoto.Infrastructure.Repositories;
 
@@ -22,7 +23,15 @@ namespace WebApiSoto.API
         {
             var builder = WebApplication.CreateBuilder(args);
             //servicios
-            
+
+            builder.Services.AddCors( opt =>
+            {
+                opt.AddPolicy("AllowAll", opt =>
+                {
+                    opt.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                });
+            });
+
             builder.Services.AddInfrastructure(builder.Configuration);
             builder.Services.AddApplication();
             // autenticacon
@@ -49,17 +58,17 @@ namespace WebApiSoto.API
              });
 
 
-            
-           
-            
-            
+
+
+
+
             //Configurando los RateLimiters
-           var limitOptions = builder.Configuration.GetSection(RateLimitingOptions.RateLimitOptions);
-           var limitPolicies = builder.Configuration.GetSection(RateLimitingPolicies.RateLimitPolicies);
+            var limitOptions = builder.Configuration.GetSection(RateLimitingOptions.RateLimitOptions);
+            var limitPolicies = builder.Configuration.GetSection(RateLimitingPolicies.RateLimitPolicies);
             // Bindeando las opciones para obtener las secciones del json Settings a memoria
             var rateLimitingOptions = new RateLimitingOptions();
-           limitOptions.Bind(rateLimitingOptions);
-                var rateLimitingPolicies = new RateLimitingPolicies();
+            limitOptions.Bind(rateLimitingOptions);
+            var rateLimitingPolicies = new RateLimitingPolicies();
             limitPolicies.Bind(rateLimitingPolicies);
             // Agregando los scopped
             //RateLimiter
@@ -79,9 +88,9 @@ namespace WebApiSoto.API
                     }
                 };
                 // ESTE ES EL DE ALGORITMO DE VENTANAS
-                options.AddFixedWindowLimiter(rateLimitingPolicies.FixedWindow ?? "FixedWindowPolicy", opt =>
+                options.AddFixedWindowLimiter(rateLimitingPolicies.FixedWindow ?? "Fixed", opt =>
                 {
-                    
+
                     opt.PermitLimit = rateLimitingOptions.PermitLimit;
                     opt.Window = TimeSpan.FromSeconds(rateLimitingOptions.Window);
                     opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
@@ -147,7 +156,7 @@ namespace WebApiSoto.API
             {
                 options.AddDocumentTransformer((document, context, cancellationToken) =>
                 {
-                    document.Info.Title = "Pino Heladería API";
+                    document.Info.Title = "Pasteleria Soto API";
                     document.Components ??= new();
                     document.Components.SecuritySchemes.Add("Bearer", new OpenApiSecurityScheme
                     {
@@ -189,14 +198,32 @@ namespace WebApiSoto.API
             app.UseMiddleware<LoggingMiddleware>();
 
             app.UseRouting();
-
+            app.UseCors("AllowAll");
             app.UseAuthorization();
 
             app.UseRateLimiter();
 
-            app.MapControllers();
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var loggerFactory = services.GetRequiredService<ILoggerFactory>();
 
-            app.Run();
+                try
+                {
+                    var inicializador = services.GetRequiredService<IDbInicializador>();
+                    inicializador.Inicializar();
+                }
+                catch (Exception ex)
+                {
+
+                    var logger = loggerFactory.CreateLogger<Program>();
+                    logger.LogError(ex, "Un Error ocurrio al ejecutar la migracion");
+                }
+
+                app.MapControllers();
+
+                app.Run();
+            }
         }
     }
 }

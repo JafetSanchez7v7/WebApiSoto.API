@@ -1,11 +1,13 @@
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using System.Linq;
 using WebApiSoto.Application.Common.DTOs.Products;
+using WebApiSoto.Application.Common.Models;
 using WebApiSoto.Application.CQRS.ProductsCQ.Commands;
 using WebApiSoto.Application.CQRS.ProductsCQ.Queries;
-using WebApiSoto.Application.Common.Models;
 
 namespace WebApiSoto.API.Controllers
 {
@@ -21,6 +23,8 @@ namespace WebApiSoto.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Gerent,Operator")]
+        [EnableRateLimiting("Fixed")]
         public async Task<IActionResult> GetProducts([FromQuery] FiltersDto dto, IValidator<FiltersDto> validator, CancellationToken ct)
         {
             var validation = validator.Validate(dto);

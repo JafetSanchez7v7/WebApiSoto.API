@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using WebApiSoto.Application.Interfaces;
 using WebApiSoto.Application.Providers;
 using WebApiSoto.Infrastructure.Context;
+using WebApiSoto.Infrastructure.DbTrigger;
 using WebApiSoto.Infrastructure.Repositories;
 
 namespace WebApiSoto.Infrastructure.DependencyInjection
@@ -27,10 +28,12 @@ namespace WebApiSoto.Infrastructure.DependencyInjection
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ICustomersRepository, CustomerRepository>();
             services.AddScoped<ITokenProvider, TokenProvider>();
+            services.AddScoped<IDbInicializador, DbInicializador>();
             services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             });
+            
 
             return services;
         }

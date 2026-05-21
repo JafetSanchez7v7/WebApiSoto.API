@@ -28,7 +28,7 @@ namespace WebApiSoto.Application.CQRS.SuppliersCQ.Commands
             if (exists is not null)
                 return Result<SupplierDto>.Failure(true, "Supplier already exists", 409);
 
-            var entity = _mapper.Map<Supplier>(request.Dto);
+            var entity = _mapper.Map<Suppliers>(request.Dto);
             await _uow.Supplier.AddAsync(entity, ct);
             await _uow.SaveChangesAsync(ct);
 

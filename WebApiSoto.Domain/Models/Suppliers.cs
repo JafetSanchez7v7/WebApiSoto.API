@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebApiSoto.Domain.Models
 {
-    public class Supplier
+    public class Suppliers
     {
         public int SupplierId { get; set; }
         public string Name { get; set; }

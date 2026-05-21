@@ -10,11 +10,11 @@ namespace WebApiSoto.Application.Interfaces
 {
     public interface ISupplierRepository
     {
-        Task<IEnumerable<Supplier>> GetSuppliersAsync(FiltersDto dto, CancellationToken ct);
-        Task<Supplier?> GetByIdAsync(int id, CancellationToken ct);
-        Task<Supplier?> GetByNameAsync(string name, CancellationToken ct);
-        Task<Supplier?> GetToUpdateAsync(int id, CancellationToken ct);
-        Task<Supplier> AddAsync(Supplier supplier, CancellationToken ct);
+        Task<IEnumerable<Suppliers>> GetSuppliersAsync(FiltersDto dto, CancellationToken ct);
+        Task<Suppliers?> GetByIdAsync(int id, CancellationToken ct);
+        Task<Suppliers?> GetByNameAsync(string name, CancellationToken ct);
+        Task<Suppliers?> GetToUpdateAsync(int id, CancellationToken ct);
+        Task<Suppliers> AddAsync(Suppliers supplier, CancellationToken ct);
         Task UpdateAsync(CancellationToken ct);
         Task DeactivateAsync(int id, CancellationToken ct);
     }

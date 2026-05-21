@@ -16,6 +16,6 @@ namespace WebApiSoto.Domain.Models
         public bool IsActive { get; set; }
 
         public Categories? Category { get; set; }
-        public Supplier? Supplier { get; set; }
+        public Suppliers? Supplier { get; set; }
     }
 }

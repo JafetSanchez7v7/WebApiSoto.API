@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
@@ -21,6 +22,7 @@ namespace WebApiSoto.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Gerent,Operator")]
         public async Task<IActionResult> GetCategories([FromQuery] FiltersDto dto, IValidator<FiltersDto> validator, CancellationToken ct)
         {
             var validation = validator.Validate(dto);
@@ -32,14 +34,14 @@ namespace WebApiSoto.API.Controllers
             var response = await _mediator.Send(new GetCategoriesQuery(dto), ct);
             return HandleResult(response);
         }
-
+        [Authorize(Roles = "Admin,Gerent,Operator")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id, CancellationToken ct)
         {
             var response = await _mediator.Send(new GetCategoryByIdQuery(id), ct);
             return HandleResult(response);
         }
-
+        [Authorize(Roles = "Admin,Gerent")]
         [HttpPost]
         public async Task<IActionResult> AddCategory([FromBody] CreateCategoryDto dto, CancellationToken ct,[FromServices] IValidator<CreateCategoryDto> validator)
         {
@@ -56,7 +58,7 @@ namespace WebApiSoto.API.Controllers
 
             return CreatedAtAction(nameof(GetById), new { id = response.Value.Id }, response);
         }
-
+        [Authorize(Roles = "Admin,Gerent")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCategory(int id, [FromBody] UpdateCategoryDto dto, CancellationToken ct,[FromServices] IValidator<UpdateCategoryDto> validator)
         {
@@ -72,6 +74,7 @@ namespace WebApiSoto.API.Controllers
         }
 
         [HttpPatch("{id}/deactivate")]
+        [Authorize(Roles = "Admin,Gerent")]
         public async Task<IActionResult> DeactivateCategory(int id, CancellationToken ct,[FromServices] IValidator<DeactivateCategoryCommand> validator)
         {
             var command = new DeactivateCategoryCommand(id);
