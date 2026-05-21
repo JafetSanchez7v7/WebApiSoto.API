@@ -34,7 +34,7 @@ namespace WebApiSoto.Infrastructure.Repositories
                 query = query.Where(x => x.ProductName.Contains(dto.Name));
             }
             if (dto.IsActive.HasValue)
-            {
+            {  
                 query = query.Where(x => x.IsActive == dto.IsActive.Value);
             }
 

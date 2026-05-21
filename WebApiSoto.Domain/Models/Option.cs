@@ -15,5 +15,5 @@ public partial class Option
 
     public decimal? Price { get; set; }
 
-    public virtual ICollection<Personalization> Personalizations { get; set; } = new List<Personalization>();
+    
 }

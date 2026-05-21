@@ -13,7 +13,8 @@ namespace WebApiSoto.Application.Interfaces
             ISupplierRepository Supplier { get; }
             IProductRepository ProductsI { get; }
             ICustomersRepository Customers { get; }
-            Task<int>SaveChangesAsync(CancellationToken ct);
+            IOptionRepository Options { get; }
+        Task<int>SaveChangesAsync(CancellationToken ct);
      
     }
 }

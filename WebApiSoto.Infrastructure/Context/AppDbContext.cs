@@ -148,7 +148,7 @@ namespace WebApiSoto.Infrastructure.Context
                 entity.Property(e => e.SalePrice).HasColumnType("decimal(10, 2)");
                 entity.Property(e => e.SubTotal).HasColumnType("decimal(10, 2)");
 
-                entity.HasOne(d => d.Option).WithMany(p => p.Personalizations)
+                entity.HasOne(d => d.Option).WithMany()
                     .HasForeignKey(d => d.OptionId)
                     .HasConstraintName("FK__Personali__Optio__6C190EBB");
 
