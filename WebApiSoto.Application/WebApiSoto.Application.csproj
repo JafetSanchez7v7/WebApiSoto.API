@@ -19,8 +19,4 @@
     <ProjectReference Include="..\WebApiSoto.Domain\WebApiSoto.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="CQRS\OptionsCQ\Commands\" />
-  </ItemGroup>
-
 </Project>

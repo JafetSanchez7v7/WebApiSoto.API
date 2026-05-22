@@ -19,29 +19,55 @@ namespace WebApiSoto.Infrastructure.Repositories
             _context = con;
         }
 
-        public async Task<IEnumerable<Option>>GetOptions(FIlterOptionsDto dto, CancellationToken ct)
+        public async Task<IEnumerable<Option>> GetOptions(FIlterOptionsDto dto, CancellationToken ct)
         {
-           var query = _context.Options.AsNoTracking().AsQueryable();
-           
+            var query = _context.Options.AsNoTracking().AsQueryable();
+
             //filtros
-            if(!string.IsNullOrEmpty(dto.Name))
+            if (!string.IsNullOrEmpty(dto.Name))
             {
                 query = query.Where(x => x.Name.Contains(dto.Name));
             }
-            if(dto.PriceGreaterThan.HasValue)
+            if (dto.PriceGreaterThan.HasValue)
             {
                 query = query.Where(x => x.Price > dto.PriceGreaterThan.Value);
             }
 
-            var lista= await query.Skip((dto.PageNumber - 1) * dto.PageSize)
+            var lista = await query.Skip((dto.PageNumber - 1) * dto.PageSize)
                 .Take(dto.PageSize)
                 .ToListAsync(ct);
-             return lista;
+            return lista;
 
-            
+
+
+
+        }
+        public async Task<Option> GetOptionById(int id, CancellationToken ct)
+        {
+            return await _context.Options
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.OptionId == id, ct);
+
 
         }
 
-      
+        public async Task<Option> CreateOption(Option option, CancellationToken ct)
+        {
+            await _context.Options.AddAsync(option, ct);
+            return option;
+        }
+        public async Task<Option> GetToUpdateAsync(int id, CancellationToken ct)
+        {
+            return await _context.Options
+                .FirstOrDefaultAsync(x => x.OptionId == id, ct);
+        }
+        public async Task DeleteOption(int id, CancellationToken ct)
+        {
+            var option = await _context.Options.FindAsync([id], ct);
+            if (option is not null)
+                _context.Options.Remove(option);
+        }
+
     }
+
 }
