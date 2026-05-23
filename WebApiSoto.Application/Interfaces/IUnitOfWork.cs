@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.DataProtection.KeyManagement.Internal;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,11 @@ namespace WebApiSoto.Application.Interfaces
             IProductRepository ProductsI { get; }
             ICustomersRepository Customers { get; }
             Task<int>SaveChangesAsync(CancellationToken ct);
+
+        Task BeginTransactionAsync(CancellationToken ct);
+        Task CommitTransactionAsync(CancellationToken ct);
+        Task RollbackTransactionAsync(CancellationToken ct);
+
      
     }
 }

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using WebApiSoto.Application.Common.DTOs.Customers;
@@ -21,8 +22,11 @@ namespace WebApiSoto.Application.CQRS.CustomersCQ.Commands
             var existantCustomer = await context.Customers.GetByNameAsync(request.dto.Name, ct);
             if (existantCustomer is not null)
                 return Result<CustomersDto>.Failure(false, "El nombre de este usuario ya existe", 409);
-            var mapped = mapper.Map<Customers>(request.dto);
-            var newCustomer = context.Customers.AddAsync( mapped, ct);
+            //tenia un error feo con automapper asi que 
+           var mapped = mapper.Map<Customers>(request.dto);
+
+            var newCustomer = await context.Customers.AddAsync( mapped, ct);
+            await context.SaveChangesAsync(ct);
             var response = mapper.Map<CustomersDto>(newCustomer);
             return Result<CustomersDto>.Success(response, 201);
         }

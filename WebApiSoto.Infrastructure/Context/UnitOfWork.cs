@@ -1,7 +1,10 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,8 +13,9 @@ using WebApiSoto.Infrastructure.Repositories;
 
 namespace WebApiSoto.Infrastructure.Context
 {
-    public class UnitOfWork: IUnitOfWork
+    public class UnitOfWork: DbContext,IUnitOfWork
     {
+        private  IDbContextTransaction _currentTransaction;
         private readonly AppDbContext _context;
         private readonly IServiceProvider _serviceProvider;
     
@@ -31,6 +35,47 @@ namespace WebApiSoto.Infrastructure.Context
         public async Task<int> SaveChangesAsync(CancellationToken ct)
         {
             return await _context.SaveChangesAsync(ct);
+        }
+
+        public async Task BeginTransactionAsync(CancellationToken ct)
+        {
+            _currentTransaction = await Database.BeginTransactionAsync();
+        }
+
+        public async Task CommitTransactionAsync(CancellationToken ct)
+        {
+            try
+            {
+                await SaveChangesAsync(ct);
+
+                if (_currentTransaction != null)
+                {
+                    await _currentTransaction.CommitAsync();
+                }
+            }
+            catch
+            {
+                await RollbackTransactionAsync(ct);
+                throw;
+            }
+            finally
+            {
+                if (_currentTransaction != null)
+                {
+                    _currentTransaction.Dispose();
+                    _currentTransaction = null;
+                }
+            }
+        }
+
+        public async Task RollbackTransactionAsync(CancellationToken ct)
+        {
+            if (_currentTransaction != null)
+            {
+                await _currentTransaction.RollbackAsync();
+                _currentTransaction.Dispose();
+                _currentTransaction = null;
+            }
         }
 
     }

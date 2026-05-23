@@ -15,8 +15,8 @@ namespace WebApiSoto.Application.Common.MappingProfiles
         public CategoryProfile()
         {
             CreateMap<Categories, CategoryDto>().ReverseMap();
-            CreateMap<CreateCategoryDto, Categories>().ForMember(dest => dest.Id, opt=> opt.Ignore());
-            CreateMap<UpdateCategoryDto, Categories>().ForMember(dest => dest.Id, opt => opt.Ignore());
+            CreateMap<CreateCategoryDto, Categories>().ForMember(dest => dest.CategoryId, opt=> opt.Ignore());
+            CreateMap<UpdateCategoryDto, Categories>().ForMember(dest => dest.CategoryId, opt => opt.Ignore());
         }
     }
 }

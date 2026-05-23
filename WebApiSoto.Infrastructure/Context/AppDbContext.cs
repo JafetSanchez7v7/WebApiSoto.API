@@ -56,7 +56,7 @@ namespace WebApiSoto.Infrastructure.Context
             // ==========================================
 
             modelBuilder.Entity<Users>(cfg => cfg.HasKey(src => src.UserId));
-            modelBuilder.Entity<Categories>(cfg => cfg.HasKey(src => src.Id));
+            modelBuilder.Entity<Categories>(cfg => cfg.HasKey(src => src.CategoryId));
             modelBuilder.Entity<Customers>(cfg => cfg.HasKey(src => src.CustomerId));
             modelBuilder.Entity<Suppliers>(cfg => cfg.HasKey(src => src.SupplierId));
 
