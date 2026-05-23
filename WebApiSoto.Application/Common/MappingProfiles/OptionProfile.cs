@@ -15,6 +15,10 @@ namespace WebApiSoto.Application.Common.MappingProfiles
         {
             CreateMap<Option , OptionDto>().ReverseMap();
             CreateMap<CreateOptionDto, Option>().ForMember(src=> src.OptionId, opt=>opt.Ignore());
+
+            CreateMap<UpdateOptionDto, Option>()
+               .ForMember(dest => dest.OptionId, opt => opt.Ignore())
+               .ForAllMembers(opt => opt.Condition((src, dest, srcVal) => srcVal != null));
         }
     }
 }

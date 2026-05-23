@@ -16,4 +16,6 @@ public partial class Inventory
     public decimal? PurchasePrice { get; set; }
 
     public decimal? SalePrice { get; set; }
+
+    public Products? Product { get; set; }
 }

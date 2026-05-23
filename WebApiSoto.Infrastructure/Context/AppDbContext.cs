@@ -87,6 +87,11 @@ namespace WebApiSoto.Infrastructure.Context
                 entity.ToTable("Inventory");
                 entity.Property(e => e.PurchasePrice).HasColumnType("decimal(18, 0)");
                 entity.Property(e => e.SalePrice).HasColumnType("decimal(18, 0)");
+
+                entity.HasOne(d => d.Product)
+                .WithOne()
+                .HasForeignKey<Inventory>(d => d.ProductId)
+                 .HasConstraintName("FK_Inventory_Products");
             });
 
             modelBuilder.Entity<Invoice>(entity =>
