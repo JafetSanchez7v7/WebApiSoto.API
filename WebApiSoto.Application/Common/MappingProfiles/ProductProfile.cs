@@ -14,7 +14,7 @@ namespace WebApiSoto.Application.Common.MappingProfiles
         public ProductProfile()
         {
             CreateMap<Products, ProductDto>()
-                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category != null ? src.Category.CategoryName : null))
+                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category != null ? src.Category.Name : null))
                 .ForMember(dest => dest.SupplierName, opt => opt.MapFrom(src => src.Supplier != null ? src.Supplier.Name : null));
             
             CreateMap<CreateProductDto, Products>().ForMember(dest => dest.ProductId, opt => opt.Ignore());

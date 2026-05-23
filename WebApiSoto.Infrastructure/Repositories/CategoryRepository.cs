@@ -26,7 +26,7 @@ namespace WebApiSoto.Infrastructure.Repositories
             // Aplicar filtros correctamente (usar asignación)
             if (!string.IsNullOrEmpty(dto.Name))
             {
-                query = query.Where(x => x.CategoryName.Contains(dto.Name));
+                query = query.Where(x => x.Name.Contains(dto.Name));
             }
             if (dto.IsActive.HasValue)
             {
@@ -45,20 +45,20 @@ namespace WebApiSoto.Infrastructure.Repositories
         {
             return await _context.Categories
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Id == id, ct);
+                .FirstOrDefaultAsync(x => x.CategoryId == id, ct);
         }
 
         public async Task<Categories?> GetByNameAsync(string name, CancellationToken ct)
         {
             return await _context.Categories
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.CategoryName == name, ct);
+                .FirstOrDefaultAsync(x => x.Name == name, ct);
         }
 
         public async Task<Categories?> GetToUpdateAsync(int id, CancellationToken ct)
         {
             // Devuelve la entidad en seguimiento para actualizar por tracking
-            return await _context.Categories.FirstOrDefaultAsync(x => x.Id == id, ct);
+            return await _context.Categories.FirstOrDefaultAsync(x => x.CategoryId == id, ct);
         }
 
         public async Task<Categories> AddAsync(Categories category, CancellationToken ct)
@@ -75,7 +75,7 @@ namespace WebApiSoto.Infrastructure.Repositories
 
         public async Task DeactivateAsync(int id, CancellationToken ct)
         {
-            var entity = await _context.Categories.FirstOrDefaultAsync(x => x.Id == id, ct);
+            var entity = await _context.Categories.FirstOrDefaultAsync(x => x.CategoryId == id, ct);
             if (entity is null)
             {
                 entity.IsActive = false;

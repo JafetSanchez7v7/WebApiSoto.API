@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace WebApiSoto.Application.Common.DTOs.Customers
 {
-    public class CustomersDto
+    public class UpdateCustomerDto
     {
-        public int CustomerId { get; set; }
-        public string Cedula { get; set; }
-        public string CustomerName { get; set; }
-        public string CustomerAddress { get; set; }
+        public string Name { get; set; }
+        public string DNI { get; set; }
+        public string Address { get; set; }
         public string City { get; set; }
         public string Phone { get; set; }
         public bool IsActive { get; set; }

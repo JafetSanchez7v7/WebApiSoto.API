@@ -34,7 +34,8 @@ namespace WebApiSoto.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult>GetById(int id, CancellationToken ct)
         {
-            throw new NotImplementedException();
+            var response = await _mediator.Send(new GetCustomerByIdQuery(id), ct);
+            return HandleResult(response); 
         }
 
         [HttpPost]
@@ -53,6 +54,24 @@ namespace WebApiSoto.API.Controllers
                 return CreatedAtAction(nameof(GetById), new { id = response.Value.CustomerId }, response);
             }
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateCustomer(int id, [FromBody] UpdateCustomerDto dto , [FromServices] IValidator<UpdateCustomerDto> validator, CancellationToken ct)
+        {
+            var validation = validator.Validate(dto);
+            if (!validation.IsValid)
+                return BadRequest(validation.Errors.Select(e => e.ErrorMessage).ToList());
+            var response = await _mediator.Send(new UpdateCustomerCommand(id, dto), ct);
+            return HandleResult(response);
+        }
+
+        [HttpPatch("{id}")]
+        public async Task<IActionResult>DeactiveCustomer(int id, CancellationToken ct)
+        {
+            var response = await _mediator.Send(new DeactivateCustomerCommand(id), ct);
+            return HandleResult(response);
+        }
+  
 
     }
 }
