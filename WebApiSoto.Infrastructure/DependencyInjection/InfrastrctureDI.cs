@@ -29,6 +29,8 @@ namespace WebApiSoto.Infrastructure.DependencyInjection
             services.AddScoped<ICustomersRepository, CustomerRepository>();
             services.AddScoped<ITokenProvider, TokenProvider>();
             services.AddScoped<IDbInicializador, DbInicializador>();
+            services.AddScoped<IOptionRepository, OptionRepository>();
+            services.AddScoped<IInventoryRepository, InventoryRepository>();
             services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
