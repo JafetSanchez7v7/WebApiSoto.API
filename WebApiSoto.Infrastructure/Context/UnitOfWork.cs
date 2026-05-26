@@ -13,9 +13,9 @@ using WebApiSoto.Infrastructure.Repositories;
 
 namespace WebApiSoto.Infrastructure.Context
 {
-    public class UnitOfWork: DbContext,IUnitOfWork
+    public class UnitOfWork: IUnitOfWork
     {
-        private  IDbContextTransaction _currentTransaction;
+        private IDbContextTransaction? _currentTransaction;
         private readonly AppDbContext _context;
         private readonly IServiceProvider _serviceProvider;
     
@@ -33,6 +33,8 @@ namespace WebApiSoto.Infrastructure.Context
         public IProductRepository ProductsI => _serviceProvider.GetRequiredService<IProductRepository>();
         public IOptionRepository Options => _serviceProvider.GetRequiredService<IOptionRepository>();
         public IInventoryRepository Inventory => _serviceProvider.GetRequiredService<IInventoryRepository>();
+        public IPurchasesRepository Purchases => _serviceProvider.GetRequiredService<IPurchasesRepository>();
+        public ISalesRepository Sales => _serviceProvider.GetRequiredService<ISalesRepository>();
         public async Task<int> SaveChangesAsync(CancellationToken ct)
         {
             return await _context.SaveChangesAsync(ct);
@@ -40,7 +42,7 @@ namespace WebApiSoto.Infrastructure.Context
 
         public async Task BeginTransactionAsync(CancellationToken ct)
         {
-            _currentTransaction = await Database.BeginTransactionAsync();
+            _currentTransaction = await _context.Database.BeginTransactionAsync(ct);
         }
 
         public async Task CommitTransactionAsync(CancellationToken ct)

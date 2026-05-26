@@ -31,9 +31,11 @@ namespace WebApiSoto.Infrastructure.DependencyInjection
             services.AddScoped<IDbInicializador, DbInicializador>();
             services.AddScoped<IOptionRepository, OptionRepository>();
             services.AddScoped<IInventoryRepository, InventoryRepository>();
+            services.AddScoped<IPurchasesRepository, PurchaseRespository>();
+            services.AddScoped<ISalesRepository, SaleRepository>();
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),b=> b.MigrationsAssembly("WebApiSoto.Infrastructure"));
             });
             
 

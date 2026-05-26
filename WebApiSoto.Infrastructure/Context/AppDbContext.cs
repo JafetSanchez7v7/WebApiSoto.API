@@ -51,6 +51,8 @@ namespace WebApiSoto.Infrastructure.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             // ==========================================
             // 1. TUS MODELOS ORIGINALES Y SUS RELACIONES
             // ==========================================
@@ -64,34 +66,36 @@ namespace WebApiSoto.Infrastructure.Context
             {
                 entity.HasKey(src => src.ProductId);
 
-                // Relación: Una Categoría tiene muchos Productos
+                // Relación: Una Categoría tiene muchos Productos (Unidireccional limpia)
                 entity.HasOne(d => d.Category)
                     .WithMany()
                     .HasForeignKey(d => d.CategoryId)
-                    .HasConstraintName("FK_Products_Categories");
+                    .HasConstraintName("FK_Products_Categories"); // Nombre exacto de tu BD anterior
 
-                // Relación: Un Proveedor tiene muchos Productos
+                // Relación: Un Proveedor tiene muchos Productos (Unidireccional limpia)
                 entity.HasOne(d => d.Supplier)
                     .WithMany()
                     .HasForeignKey(d => d.SupplierId)
-                    .HasConstraintName("FK_Products_Suppliers");
+                    .HasConstraintName("FK_Products_Suppliers"); // Nombre exacto de tu BD anterior
             });
 
             // ==========================================
-            // 2. MODELOS NUEVOS (SCAFFOLDING GENERADO)
+            // 2. MODELOS NUEVOS (SCAFFOLDING GENERADO Y CORREGIDO)
             // ==========================================
 
             modelBuilder.Entity<Inventory>(entity =>
             {
                 entity.HasKey(e => e.InventoryId).HasName("PK__Inventor__F5FDE6B3F13CBCAC");
                 entity.ToTable("Inventory");
-                entity.Property(e => e.PurchasePrice).HasColumnType("decimal(18, 0)");
-                entity.Property(e => e.SalePrice).HasColumnType("decimal(18, 0)");
+
+                // 🔥 CORREGIDO: Cambiado a decimal(18,2) para no perder los centavos en los precios de compra y venta
+                entity.Property(e => e.PurchasePrice).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.SalePrice).HasColumnType("decimal(18, 2)");
 
                 entity.HasOne(d => d.Product)
-                .WithOne()
-                .HasForeignKey<Inventory>(d => d.ProductId)
-                 .HasConstraintName("FK_Inventory_Products");
+                    .WithOne()
+                    .HasForeignKey<Inventory>(d => d.ProductId)
+                    .HasConstraintName("FK_Inventory_Products");
             });
 
             modelBuilder.Entity<Invoice>(entity =>
@@ -102,7 +106,7 @@ namespace WebApiSoto.Infrastructure.Context
                 entity.Property(e => e.PrintedDate).HasColumnType("datetime");
                 entity.Property(e => e.TotalAmount).HasColumnType("decimal(18, 2)");
 
-                entity.HasOne(d => d.Sale).WithMany(p => p.Invoices)
+                entity.HasOne(d => d.Sale).WithMany()
                     .HasForeignKey(d => d.SaleId)
                     .HasConstraintName("FK__Invoice__SaleId__76969D2E");
             });
@@ -179,6 +183,13 @@ namespace WebApiSoto.Infrastructure.Context
                 entity.HasKey(e => e.PurchaseId).HasName("PK__Purchase__6B0A6BBEB2250F74");
                 entity.Property(e => e.Date).HasColumnType("datetime");
                 entity.Property(e => e.TotalAmount).HasColumnType("decimal(10, 2)");
+
+                // 🌟 CORREGIDO: Amarramos explícitamente el objeto "Suppliers" a tu columna "SupplierId"
+                // Esto destruye para siempre la columna fantasma 'SuppliersSupplierId'
+                entity.HasOne(d => d.Suppliers)
+                    .WithMany()
+                    .HasForeignKey(d => d.SupplierId)
+                    .HasConstraintName("FK_Purchases_Suppliers_SupplierId");
             });
 
             modelBuilder.Entity<PurchaseDetail>(entity =>
@@ -203,19 +214,19 @@ namespace WebApiSoto.Infrastructure.Context
             modelBuilder.Entity<SaleDetail>(entity =>
             {
                 entity.HasKey(e => e.Id).HasName("PK__SaleDeta__3214EC0774E07D63");
-                entity.Property(e => e.LineAmount).HasColumnType("decimal(18, 0)");
-                entity.Property(e => e.SalePrice).HasColumnType("decimal(18, 0)");
-                entity.Property(e => e.Volume).HasMaxLength(50).IsUnicode(false);
+                entity.Property(e => e.LineAmount).HasColumnType("decimal(18, 2)"); // Ajustado con decimales estándar
+               
 
                 entity.HasOne(d => d.Sale).WithMany(p => p.SaleDetails)
                     .HasForeignKey(d => d.SaleId)
                     .HasConstraintName("FK__SaleDetai__SaleI__72C60C4A");
             });
-
-            
         }
 
-        
 
     }
+
+
+
 }
+

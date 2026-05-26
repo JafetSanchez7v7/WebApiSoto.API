@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -65,6 +66,16 @@ namespace WebApiSoto.Infrastructure.Repositories
                 .Include(x => x.Product)
                 .Where(x => x.Product != null && x.Product.ProductName.Contains(productName))
                 .ToListAsync(ct);
+        }
+
+        public async Task<IEnumerable<Inventory>>GetWhereAsync(Expression<Func<Inventory,bool>> predicate, CancellationToken ct)
+        {
+            return await _context.Inventories.Include(x => x.Product).Where(predicate).ToListAsync(ct);
+        }
+        public async Task<Inventory> AddAsync(Inventory inv, CancellationToken ct)
+        {
+            var result = await _context.Inventories.AddAsync(inv, ct);
+            return result.Entity;
         }
     }
     }
