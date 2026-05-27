@@ -18,7 +18,8 @@ namespace WebApiSoto.Application.Interfaces
             IInventoryRepository Inventory { get; }
             IPurchasesRepository Purchases { get; }
             ISalesRepository Sales { get; }
-            Task<int>SaveChangesAsync(CancellationToken ct);
+            IPersonalizedProductRepository PersonalizedProducts { get; }
+        Task<int>SaveChangesAsync(CancellationToken ct);
 
         Task BeginTransactionAsync(CancellationToken ct);
         Task CommitTransactionAsync(CancellationToken ct);

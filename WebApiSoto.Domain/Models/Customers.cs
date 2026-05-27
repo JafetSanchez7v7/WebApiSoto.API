@@ -15,5 +15,7 @@ namespace WebApiSoto.Domain.Models
         public string Phone { get; set; }
         public string City { get; set; }
         public bool IsActive { get; set; }
+
+        public ICollection<PersonalizedProduct> PersonalizedProducts { get; set; }
     }
 }

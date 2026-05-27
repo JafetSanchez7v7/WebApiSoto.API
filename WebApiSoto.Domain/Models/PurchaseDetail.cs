@@ -9,6 +9,7 @@ public partial class PurchaseDetail
     public int Id { get; set; }
 
     public int ProductId { get; set; }
+    [ForeignKey("ProductId")]
     
     public virtual Products? Products { get; set; }
 

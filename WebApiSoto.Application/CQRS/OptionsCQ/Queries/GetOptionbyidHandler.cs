@@ -11,7 +11,7 @@ using WebApiSoto.Application.Interfaces;
 
 namespace WebApiSoto.Application.CQRS.OptionsCQ.Queries
 {
-    public class GetOptionbyidHeandler
+    public class GetOptionbyidHandler
     {
         public record GetOptionByIdQuery(int Id) : IRequest<Result<OptionDto>>;
 
