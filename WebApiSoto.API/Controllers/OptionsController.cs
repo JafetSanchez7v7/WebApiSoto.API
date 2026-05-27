@@ -6,7 +6,7 @@ using WebApiSoto.Application.Common.DTOs.OptionsDtos;
 using WebApiSoto.Application.Common.Models;
 using WebApiSoto.Application.CQRS.OptionsCQ.Commands;
 using WebApiSoto.Application.CQRS.OptionsCQ.Queries;
-using static WebApiSoto.Application.CQRS.OptionsCQ.Queries.GetOptionbyidHeandler;
+using static WebApiSoto.Application.CQRS.OptionsCQ.Queries.GetOptionbyidHandler;
 
 namespace WebApiSoto.API.Controllers
 {

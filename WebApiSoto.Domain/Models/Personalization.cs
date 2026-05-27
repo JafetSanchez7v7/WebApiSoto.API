@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApiSoto.Domain.Models;
 
@@ -17,6 +18,7 @@ public partial class Personalization
 
     public decimal? SubTotal { get; set; }
 
+    [ForeignKey("OptionId")]
     public virtual Option? Option { get; set; }
 
     public virtual PersonalizedProduct? Personalized { get; set; }

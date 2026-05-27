@@ -35,6 +35,7 @@ namespace WebApiSoto.Infrastructure.Context
         public IInventoryRepository Inventory => _serviceProvider.GetRequiredService<IInventoryRepository>();
         public IPurchasesRepository Purchases => _serviceProvider.GetRequiredService<IPurchasesRepository>();
         public ISalesRepository Sales => _serviceProvider.GetRequiredService<ISalesRepository>();
+        public IPersonalizedProductRepository PersonalizedProducts =>_serviceProvider.GetRequiredService<IPersonalizedProductRepository>();
         public async Task<int> SaveChangesAsync(CancellationToken ct)
         {
             return await _context.SaveChangesAsync(ct);

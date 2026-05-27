@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -68,6 +69,13 @@ namespace WebApiSoto.Infrastructure.Repositories
                 _context.Options.Remove(option);
         }
 
+        public async Task<IEnumerable<Option>> GetWhereAsync(Expression<Func<Option, bool>> predicate, CancellationToken ct)
+        {
+            return await _context.Options
+                .AsNoTracking()
+                .Where(predicate)
+                .ToListAsync(ct);
+        }
     }
 
 }

@@ -173,9 +173,9 @@ namespace WebApiSoto.Infrastructure.Context
                 entity.Property(e => e.Description).HasMaxLength(200).IsUnicode(false);
                 entity.Property(e => e.SalePrice).HasColumnType("decimal(10, 2)");
 
-                entity.HasOne(d => d.Order).WithMany(p => p.PersonalizedProducts)
-                    .HasForeignKey(d => d.OrderId)
-                    .HasConstraintName("FK__Personali__Order__66603565");
+                entity.HasOne(d => d.Customer).WithMany(p => p.PersonalizedProducts)
+                    .HasForeignKey(d => d.CustomerId)
+                    .HasConstraintName("FK_PersonalizedProducts_Customers");
             });
 
             modelBuilder.Entity<Purchase>(entity =>

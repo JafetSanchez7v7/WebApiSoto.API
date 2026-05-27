@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using WebApiSoto.Application.Common.Models;
@@ -15,6 +16,8 @@ namespace WebApiSoto.Application.Interfaces
         //    Task<Option>GetByName(string name, CancellationToken ct);
         Task<Option> CreateOption(Option option, CancellationToken ct);
         Task<Option> GetToUpdateAsync(int id, CancellationToken ct);
+
+        Task<IEnumerable<Option>> GetWhereAsync(Expression<Func<Option, bool>> predicate, CancellationToken ct);
         Task DeleteOption(int id, CancellationToken ct);
     }
 }
