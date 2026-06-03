@@ -9,13 +9,13 @@ namespace WebApiSoto.Application.Common.DTOs.OptionsDtos
     public class CreateOptionDto
     {
 
-        public string? Name { get; set; }
+        public string Name { get; set; }
 
-        public string? Description { get; set; }
+        public string Description { get; set; }
 
-        public string? Measurement { get; set; }
+        public string Measurement { get; set; }
 
-        public decimal? Price { get; set; }
+        public decimal Price { get; set; }
 
     }
 }

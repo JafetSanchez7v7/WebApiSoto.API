@@ -96,5 +96,11 @@ namespace WebApiSoto.Infrastructure.Repositories
             var result = await _context.Inventories.AddAsync(inv, ct);
             return result.Entity;
         }
+
+        public async Task<Inventory?> GetToUpdateAsync(int id, CancellationToken ct)
+        {
+            return await _context.Inventories
+                .FirstOrDefaultAsync(x => x.InventoryId == id, ct);
+        }
     }
-    }
+}

@@ -18,7 +18,7 @@ namespace WebApiSoto.Application.Interfaces
         Task<IEnumerable<Inventory>> GetInventoryByProductName(string productName, CancellationToken ct);
         Task<IEnumerable<Inventory>> GetWhereAsync(Expression<Func<Inventory, bool>> predicate, CancellationToken ct);
         Task<Inventory> AddAsync(Inventory inv, CancellationToken ct);
-       
+        Task<Inventory?> GetToUpdateAsync(int id, CancellationToken ct);
 
     }
 }
