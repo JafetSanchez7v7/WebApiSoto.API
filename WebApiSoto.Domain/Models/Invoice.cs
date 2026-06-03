@@ -1,5 +1,6 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApiSoto.Domain.Models;
 
@@ -17,7 +18,8 @@ public partial class Invoice
 
     public decimal? TotalAmount { get; set; }
 
-    public virtual ICollection<InvoiceDetail> InvoiceDetails { get; set; } = new List<InvoiceDetail>();
+    public virtual ICollection<InvoiceDetail> InvoiceDetails { get; set; } =  new List<InvoiceDetail>();
 
-    public virtual Sale? Sale { get; set; }
+    [ForeignKey("SaleId")]
+    public  Sale Sale { get; set; }
 }

@@ -32,12 +32,12 @@ namespace WebApiSoto.Application.CQRS.ProductsCQ.Queries
             if (!response.Any())
                 return Result<PaginationList<ProductDto>>.Failure(true, "No Registers", 200);
 
-            var totalPages = (int)Math.Ceiling((double)response.Count() / request.dto.PageSize);
+            var totalCount = await _uow.ProductsI.CountAsync(request.dto, ct);
+            var totalPages = (int)Math.Ceiling((double)totalCount / request.dto.PageSize);
 
             var mapped = _mapper.Map<List<ProductDto>>(response);
            
-            
-            var pagination = new PaginationList<ProductDto>(mapped, request.dto.PageNumber, totalPages);
+            var pagination = new PaginationList<ProductDto>(mapped, request.dto.PageNumber, totalPages, totalCount);
             return Result<PaginationList<ProductDto>>.Success(pagination, 200);
         }
 

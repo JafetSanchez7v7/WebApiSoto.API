@@ -26,7 +26,7 @@ namespace WebApiSoto.Infrastructure.Repositories
             //filtros
             if (!string.IsNullOrEmpty(dto.Name))
             {
-                query = query.Where(x => x.Name.Contains(dto.Name));
+                query = query.Where(x => x.Name != null && x.Name.Contains(dto.Name));
             }
             if (dto.PriceGreaterThan.HasValue)
             {
@@ -37,18 +37,29 @@ namespace WebApiSoto.Infrastructure.Repositories
                 .Take(dto.PageSize)
                 .ToListAsync(ct);
             return lista;
-
-
-
-
         }
+
+        public async Task<int> CountAsync(FIlterOptionsDto dto, CancellationToken ct)
+        {
+            var query = _context.Options.AsNoTracking().AsQueryable();
+
+            if (!string.IsNullOrEmpty(dto.Name))
+            {
+                query = query.Where(x => x.Name != null && x.Name.Contains(dto.Name));
+            }
+            if (dto.PriceGreaterThan.HasValue)
+            {
+                query = query.Where(x => x.Price > dto.PriceGreaterThan.Value);
+            }
+
+            return await query.CountAsync(ct);
+        }
+
         public async Task<Option> GetOptionById(int id, CancellationToken ct)
         {
             return await _context.Options
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.OptionId == id, ct);
-
-
         }
 
         public async Task<Option> CreateOption(Option option, CancellationToken ct)
@@ -56,14 +67,16 @@ namespace WebApiSoto.Infrastructure.Repositories
             await _context.Options.AddAsync(option, ct);
             return option;
         }
+
         public async Task<Option> GetToUpdateAsync(int id, CancellationToken ct)
         {
             return await _context.Options
                 .FirstOrDefaultAsync(x => x.OptionId == id, ct);
         }
+
         public async Task DeleteOption(int id, CancellationToken ct)
         {
-            var option = await _context.Options.FindAsync([id], ct);
+            var option = await _context.Options.FindAsync(id, ct);
             if (option is not null)
                 _context.Options.Remove(option);
         }

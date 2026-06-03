@@ -16,8 +16,10 @@ namespace WebApiSoto.Infrastructure.Context
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-            
         }
+
+      
+
 
         public virtual DbSet<Inventory> Inventories { get; set; }
 
@@ -48,6 +50,7 @@ namespace WebApiSoto.Infrastructure.Context
         public DbSet<Suppliers> Suppliers { get; set; }
         public DbSet<Products> Products { get; set; }
         public DbSet<Customers> Customers { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -115,7 +118,7 @@ namespace WebApiSoto.Infrastructure.Context
             {
                 entity.HasKey(e => e.Id).HasName("PK__InvoiceD__3214EC075F758FC1");
                 entity.Property(e => e.LineTotal).HasColumnType("decimal(10, 2)");
-                entity.Property(e => e.SalePrice).HasColumnType("decimal(10, 2)");
+               
 
                 entity.HasOne(d => d.Invoice).WithMany(p => p.InvoiceDetails)
                     .HasForeignKey(d => d.InvoiceId)
@@ -209,13 +212,16 @@ namespace WebApiSoto.Infrastructure.Context
                 entity.HasKey(e => e.SaleId).HasName("PK__Sales__1EE3C3FF8959E445");
                 entity.Property(e => e.SaleDate).HasColumnType("datetime");
                 entity.Property(e => e.SaleTotal).HasColumnType("decimal(10, 2)");
+                entity.HasOne(s=> s.Invoice).WithOne(i=> i.Sale)
+                    .HasForeignKey<Invoice>(i => i.SaleId)
+                    ;
             });
 
             modelBuilder.Entity<SaleDetail>(entity =>
             {
                 entity.HasKey(e => e.Id).HasName("PK__SaleDeta__3214EC0774E07D63");
                 entity.Property(e => e.LineAmount).HasColumnType("decimal(18, 2)"); // Ajustado con decimales estándar
-               
+
 
                 entity.HasOne(d => d.Sale).WithMany(p => p.SaleDetails)
                     .HasForeignKey(d => d.SaleId)
@@ -225,7 +231,6 @@ namespace WebApiSoto.Infrastructure.Context
 
 
     }
-
 
 
 }

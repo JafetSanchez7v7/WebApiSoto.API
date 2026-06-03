@@ -63,7 +63,20 @@ namespace WebApiSoto.Infrastructure.Repositories
 
                 return items;
 
+        }
 
+        public async Task<int> CountAsync(FiltersDto filters, CancellationToken ct)
+        {
+            var query = _context.Users.AsNoTracking().AsQueryable();
+            if (!string.IsNullOrEmpty(filters.Name))
+            {
+                query = query.Where(u => u.UserName.Contains(filters.Name));
+            }
+            if (filters.IsActive.HasValue)
+            {
+                query = query.Where(u => u.IsActive == filters.IsActive.Value);
+            }
+            return await query.CountAsync(ct);
         }
 
         public async Task<Users?>GetByIdAsync(int id, CancellationToken ct)

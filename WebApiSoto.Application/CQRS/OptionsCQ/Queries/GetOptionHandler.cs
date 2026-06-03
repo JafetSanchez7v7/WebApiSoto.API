@@ -21,9 +21,10 @@ namespace WebApiSoto.Application.CQRS.OptionsCQ.Queries
             if (!response.Any())
                 return Result<PaginationList<OptionDto>>.Failure(true, "No Registers", 200);
 
-            var totalPages = (int)Math.Ceiling((double)response.Count() / request.dto.PageSize);
+            var totalCount = await context.Options.CountAsync(request.dto, ct);
+            var totalPages = (int)Math.Ceiling((double)totalCount / request.dto.PageSize);
             var mapped = mapper.Map<List<OptionDto>>(response);
-            var pagination = new PaginationList<OptionDto>(mapped, request.dto.PageNumber, totalPages);
+            var pagination = new PaginationList<OptionDto>(mapped, request.dto.PageNumber, totalPages, totalCount);
 
             return Result<PaginationList<OptionDto>>.Success(pagination, 200);
 

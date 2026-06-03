@@ -43,6 +43,25 @@ namespace WebApiSoto.Infrastructure.Repositories
                 .ToListAsync(ct);
         }
 
+        public async Task<int> CountAsync(FilterInventoryDto dto, CancellationToken ct)
+        {
+            var query = _context.Inventories
+                .AsNoTracking()
+                .Include(x => x.Product)
+                .AsQueryable();
+
+            if (dto.Id.HasValue)
+                query = query.Where(x => x.InventoryId == dto.Id.Value);
+
+            if (dto.ProductId.HasValue)
+                query = query.Where(x => x.ProductId == dto.ProductId.Value);
+
+            if (!string.IsNullOrEmpty(dto.ProductName))
+                query = query.Where(x => x.Product != null && x.Product.ProductName.Contains(dto.ProductName));
+
+            return await query.CountAsync(ct);
+        }
+
         public async Task<Inventory?> GetInventoryById(int id, CancellationToken ct)
         {
             return await _context.Inventories

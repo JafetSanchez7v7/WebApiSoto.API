@@ -13,7 +13,6 @@ namespace WebApiSoto.Application.Interfaces
         Task<Purchase> AddPurchaseAsync(Purchase purchase, CancellationToken ct);
         Task<Purchase> GetByIdAsync(int id, CancellationToken ct);
         Task<IEnumerable<Purchase>> GetPurchasesAsync(FilterPurchasesDto dto, CancellationToken ct);
-        
-        
+        Task<int> CountAsync(FilterPurchasesDto dto, CancellationToken ct);
     }
 }

@@ -11,6 +11,7 @@ namespace WebApiSoto.Application.Interfaces
     public interface ICustomersRepository
     {
         Task<IEnumerable<Customers>> GetCustomersAsync(FiltersDto dto, CancellationToken ct);
+        Task<int> CountAsync(FiltersDto dto, CancellationToken ct);
         Task<Customers?> GetByIdAsync(int id, CancellationToken ct);
         Task<Customers?> GetByNameAsync(string name, CancellationToken ct);
         Task<Customers?> GetToUpdateAsync(int id, CancellationToken ct);

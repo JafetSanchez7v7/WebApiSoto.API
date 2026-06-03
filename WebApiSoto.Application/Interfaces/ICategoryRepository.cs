@@ -12,6 +12,7 @@ namespace WebApiSoto.Application.Interfaces
     public interface ICategoryRepository
     {
         Task<IEnumerable<Categories>> GetCategoriesAsync(FiltersDto dto, CancellationToken ct);
+        Task<int> CountAsync(FiltersDto dto, CancellationToken ct);
         Task<Categories?> GetByIdAsync(int id, CancellationToken ct);
         Task<Categories?> GetByNameAsync(string name, CancellationToken ct);
         Task<Categories?> GetToUpdateAsync(int id, CancellationToken ct);

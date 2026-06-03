@@ -24,9 +24,10 @@ namespace WebApiSoto.Application.CQRS.InventoryCQ.Queries
             if (!response.Any())
                 return Result<PaginationList<InventoryDto>>.Failure(true, "No Registers", 200);
 
-            var totalPages = (int)Math.Ceiling((double)response.Count() / request.Dto.PageSize);
+            var totalCount = await uow.Inventory.CountAsync(request.Dto, ct);
+            var totalPages = (int)Math.Ceiling((double)totalCount / request.Dto.PageSize);
             var mapped = mapper.Map<List<InventoryDto>>(response);
-            var pagination = new PaginationList<InventoryDto>(mapped, request.Dto.PageNumber, totalPages);
+            var pagination = new PaginationList<InventoryDto>(mapped, request.Dto.PageNumber, totalPages, totalCount);
 
             return Result<PaginationList<InventoryDto>>.Success(pagination, 200);
         }

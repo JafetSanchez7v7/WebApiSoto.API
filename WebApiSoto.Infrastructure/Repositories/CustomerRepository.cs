@@ -34,6 +34,20 @@ public class CustomerRepository: ICustomersRepository
         return response;
     }
 
+    public async Task<int> CountAsync(FiltersDto dto, CancellationToken ct)
+    {
+        var query = _context.Customers.AsNoTracking().AsQueryable();
+        if (!string.IsNullOrEmpty(dto.Name))
+        {
+            query = query.Where(c => c.CustomerName.Contains(dto.Name));
+        }
+        if(dto.IsActive.HasValue)
+        {
+            query = query.Where(c => c.IsActive == dto.IsActive.Value);
+        }
+        return await query.CountAsync(ct);
+    }
+
     public async Task<Customers?> GetByIdAsync(int id, CancellationToken ct)
     {
         return await _context.Customers.AsNoTracking().FirstOrDefaultAsync(c => c.CustomerId == id, ct);

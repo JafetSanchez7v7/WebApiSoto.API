@@ -21,11 +21,12 @@ namespace WebApiSoto.Application.CQRS.UserDto.Queries
            if (!users.Any())
                 return Result<PaginationList<UsersDto>>.Failure(true, "No users found", 200);
 
-            var totalPages = (int) Math.Ceiling((double)users.Count() / request.dto.PageSize);
+            var totalCount = await context.User.CountAsync(request.dto, ct);
+            var totalPages = (int)Math.Ceiling((double)totalCount / request.dto.PageSize);
 
             var mapping = mapper.Map<List<UsersDto>>(users);
 
-            return Result<PaginationList<UsersDto>>.Success(new PaginationList<UsersDto>(mapping, request.dto.PageNumber, totalPages ), 200);
+            return Result<PaginationList<UsersDto>>.Success(new PaginationList<UsersDto>(mapping, request.dto.PageNumber, totalPages, totalCount), 200);
         }
     }
 

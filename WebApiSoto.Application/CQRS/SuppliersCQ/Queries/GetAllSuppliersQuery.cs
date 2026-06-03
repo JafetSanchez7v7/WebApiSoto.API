@@ -31,9 +31,10 @@ namespace WebApiSoto.Application.CQRS.SuppliersCQ.Queries
             if (!response.Any())
                 return Result<PaginationList<SupplierDto>>.Failure(true, "No Registers", 200);
 
-            var totalPages = (int)Math.Ceiling((double)response.Count() / request.dto.PageSize);
+            var totalCount = await _uow.Supplier.CountAsync(request.dto, ct);
+            var totalPages = (int)Math.Ceiling((double)totalCount / request.dto.PageSize);
             var mapped = _mapper.Map<List<SupplierDto>>(response);
-            var pagination = new PaginationList<SupplierDto>(mapped, request.dto.PageNumber, totalPages);
+            var pagination = new PaginationList<SupplierDto>(mapped, request.dto.PageNumber, totalPages, totalCount);
             return Result<PaginationList<SupplierDto>>.Success(pagination, 200);
         }
     }

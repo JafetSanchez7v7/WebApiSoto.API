@@ -11,6 +11,7 @@ namespace WebApiSoto.Application.Interfaces
     public interface IUsersRepository
     {
         Task<IEnumerable<Users>> GetAsync(FiltersDto filters, CancellationToken ct);
+        Task<int> CountAsync(FiltersDto filters, CancellationToken ct);
         Task<Users?> GetByIdAsync (int id, CancellationToken ct);
         Task<Users?> GetToUpdateAsync(int id, CancellationToken ct);
         Task<Users> AddAsync(Users user, CancellationToken ct);

@@ -20,9 +20,10 @@ namespace WebApiSoto.Application.CQRS.CategoriesCQ.Queries
             if (!response.Any())
                 return Result<PaginationList<CategoryDto>>.Failure(true, "No Registers", 200);
 
-            var totalPages = (int)Math.Ceiling((double)response.Count() / request.dto.PageSize);
+            var totalCount = await context.Category.CountAsync(request.dto, ct);
+            var totalPages = (int)Math.Ceiling((double)totalCount / request.dto.PageSize);
             var mapped = mapper.Map<List<CategoryDto>>(response);
-            var pagination = new PaginationList<CategoryDto>(mapped, request.dto.PageNumber, totalPages);
+            var pagination = new PaginationList<CategoryDto>(mapped, request.dto.PageNumber, totalPages, totalCount);
             return Result<PaginationList<CategoryDto>>.Success(pagination, 200);
                
             
