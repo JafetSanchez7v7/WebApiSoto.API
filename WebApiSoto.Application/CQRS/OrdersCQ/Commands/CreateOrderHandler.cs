@@ -99,13 +99,14 @@ namespace WebApiSoto.Application.CQRS.OrdersCQ.Commands
                     await uow.SaveChangesAsync(ct);
 
                     // 5. Recargar con navegaciones para el mapeo
-                    var created = await uow.Orders.GetByIdAsync(order.OrderId, ct);
 
                     await uow.CommitTransactionAsync(ct);
 
+                    var created = await uow.Orders.GetByIdAsync(order.OrderId, ct);
+
                     return Result<OrderDto>.Success(mapper.Map<OrderDto>(created), 201);
                 }
-                catch (Exception)
+                 catch (Exception)
                 {
                     await uow.RollbackTransactionAsync(ct);
                     return Result<OrderDto>.Failure(false, "Ocurrió un error al registrar el pedido, intente más tarde", 500);

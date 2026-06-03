@@ -8,5 +8,5 @@ public class Customers
         public string City { get; set; }
         public bool IsActive { get; set; }
 
-        public ICollection<PersonalizedProduct> PersonalizedProducts { get; set; }
+        
     }

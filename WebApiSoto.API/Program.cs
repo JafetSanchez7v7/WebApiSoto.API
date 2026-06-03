@@ -125,7 +125,7 @@ namespace WebApiSoto.API
                     var userAgent = partitioner.Request.Headers.UserAgent.ToString();
                     return RateLimitPartition.GetFixedWindowLimiter(userAgent, httpContext => new FixedWindowRateLimiterOptions
                     {
-                        PermitLimit = rateLimitingOptions.PartitionedPermitLimit,
+                        PermitLimit = 200,
                         Window = TimeSpan.FromMinutes(rateLimitingOptions.Window),
                         QueueProcessingOrder = QueueProcessingOrder.OldestFirst
                     });
@@ -138,7 +138,7 @@ namespace WebApiSoto.API
                     var userAgent = partitioner.Request.Headers.UserAgent.ToString();
                     return RateLimitPartition.GetFixedWindowLimiter(userAgent, context => new FixedWindowRateLimiterOptions
                     {
-                        PermitLimit = rateLimitingOptions.GlobalPermitLimit,
+                        PermitLimit = 200,
                         Window = TimeSpan.FromHours(1),
                         QueueProcessingOrder = QueueProcessingOrder.OldestFirst
                     }); ;

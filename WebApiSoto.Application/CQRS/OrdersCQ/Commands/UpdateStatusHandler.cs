@@ -93,13 +93,19 @@ namespace WebApiSoto.Application.CQRS.OrdersCQ
                         SaleDetails = saleDetails
                     };
 
+                    var factura = mapper.Map<Invoice>(sale);
+                    sale.Invoice = factura;
+
                     await uow.Sales.AddSaleAsync(sale, ct);
                 }
 
+                
                 await uow.SaveChangesAsync(ct);
+                
                 await uow.CommitTransactionAsync(ct);
+                var newOrder = await uow.Orders.GetByIdAsync(order.OrderId, ct);
 
-                return Result<OrderDto>.Success(mapper.Map<OrderDto>(order), 200);
+                return Result<OrderDto>.Success(mapper.Map<OrderDto>(newOrder), 200);
             }
             catch (Exception)
             {

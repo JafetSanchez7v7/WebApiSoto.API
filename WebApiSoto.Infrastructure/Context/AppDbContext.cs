@@ -139,7 +139,7 @@ namespace WebApiSoto.Infrastructure.Context
                 entity.HasKey(e => e.OrderId).HasName("PK__Orders__C3905BCF865F7C3B");
                 entity.Property(e => e.OrderDate).HasColumnType("datetime");
                 entity.Property(e => e.TimeDelivery).HasColumnType("datetime");
-                entity.Property(e => e.TotalAmount).HasColumnType("decimal(10, 2)");
+                entity.Property(e => e.TotalAmount).HasColumnType("decimal(18, 2)");
             });
 
             modelBuilder.Entity<OrderDetail>(entity =>
@@ -176,7 +176,7 @@ namespace WebApiSoto.Infrastructure.Context
                 entity.Property(e => e.Description).HasMaxLength(200).IsUnicode(false);
                 entity.Property(e => e.SalePrice).HasColumnType("decimal(10, 2)");
 
-                entity.HasOne(d => d.Customer).WithMany(p => p.PersonalizedProducts)
+                entity.HasOne(d => d.Customer).WithMany()
                     .HasForeignKey(d => d.CustomerId)
                     .HasConstraintName("FK_PersonalizedProducts_Customers");
             });

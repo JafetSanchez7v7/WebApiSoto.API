@@ -27,7 +27,8 @@ namespace WebApiSoto.Application.CQRS.OrdersCQ.Queries
 
                 var totalPages = (int)Math.Ceiling((double)orders.Count() / request.Dto.PageSize);
                 var mapped = mapper.Map<List<OrderDto>>(orders);
-                var pagination = new PaginationList<OrderDto>(mapped, request.Dto.PageNumber, totalPages);
+                var totalRegisters = await uow.Orders.CountAsync(ct);
+                var pagination = new PaginationList<OrderDto>(mapped, request.Dto.PageNumber, totalPages, totalRegisters);
 
                 return Result<PaginationList<OrderDto>>.Success(pagination, 200);
             }

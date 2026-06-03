@@ -51,5 +51,10 @@ namespace WebApiSoto.Infrastructure.Repositories
             return await _context.Orders
                 .FirstOrDefaultAsync(x => x.OrderId == id, ct);
         }
+
+        public async Task<int> CountAsync(CancellationToken ct)
+        {
+            return await _context.Orders.CountAsync(ct);
+        }
     }
 }
