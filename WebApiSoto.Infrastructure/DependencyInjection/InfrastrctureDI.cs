@@ -33,6 +33,7 @@ namespace WebApiSoto.Infrastructure.DependencyInjection
             services.AddScoped<IInventoryRepository, InventoryRepository>();
             services.AddScoped<IPurchasesRepository, PurchaseRespository>();
             services.AddScoped<ISalesRepository, SaleRepository>();
+            services.AddSingleton<IInvoiceRepository, InvoiceRepository>();
             services.AddScoped<IPersonalizedProductRepository, PersonalizedProductRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
 

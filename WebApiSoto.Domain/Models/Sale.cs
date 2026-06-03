@@ -6,9 +6,10 @@ namespace WebApiSoto.Domain.Models;
 public partial class Sale
 {
     public int SaleId { get; set; }
+    
 
     public int? CustomerId { get; set; }
-    public virtual Customers Customer { get; set; }
+    public virtual Customers Customer {get; set;}
 
     
 
@@ -16,6 +17,6 @@ public partial class Sale
 
     public decimal? SaleTotal { get; set; }
 
-    
+    public Invoice Invoice { get; set; }
     public virtual ICollection<SaleDetail> SaleDetails { get; set; } = new List<SaleDetail>();
 }

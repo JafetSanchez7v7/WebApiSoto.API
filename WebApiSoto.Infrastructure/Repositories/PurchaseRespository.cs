@@ -47,6 +47,29 @@ namespace WebApiSoto.Infrastructure.Repositories
                 .ToListAsync(ct);
             
         }
+
+        public async Task<int> CountAsync(FilterPurchasesDto dto, CancellationToken ct)
+        {
+            var query = _context.Purchases.AsNoTracking().AsQueryable();
+
+            if (dto.SupplierId.HasValue && dto.SupplierId > 0)
+                query = query.Where(x => x.SupplierId == dto.SupplierId);
+
+            if (dto.MinTotal.HasValue && dto.MinTotal > 0)
+                query = query.Where(x => x.TotalAmount >= dto.MinTotal.Value);
+
+            if (dto.MaxTotal.HasValue && dto.MaxTotal > 0)
+                query = query.Where(x => x.TotalAmount <= dto.MaxTotal.Value);
+
+            if (dto.from.HasValue)
+                query = query.Where(x => x.Date >= dto.from.Value);
+
+            if (dto.to.HasValue)
+                query = query.Where(x => x.Date <= dto.to.Value.AddDays(1).AddTicks(-1));
+
+            return await query.CountAsync(ct);
+        }
+
         public async Task<Purchase> GetByIdAsync(int id, CancellationToken ct)
         {
             return await _context.Purchases.AsNoTracking().Include(x => x.Suppliers).Include(x => x.PurchaseDetails).ThenInclude(x => x.Products).FirstOrDefaultAsync(x => x.PurchaseId == id, ct);

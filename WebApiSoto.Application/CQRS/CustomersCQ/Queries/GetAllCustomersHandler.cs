@@ -20,10 +20,11 @@ namespace WebApiSoto.Application.CQRS.CustomersCQ.Queries
             if (!response.Any())
                 return Result<PaginationList<CustomersDto>>.Failure(true, "No Registers", 200);
 
-            var  totalPages = (int)Math.Ceiling(response.Count() / (double)request.dto.PageSize);
+            var totalCount = await _uow.Customers.CountAsync(request.dto, ct);
+            var totalPages = (int)Math.Ceiling(totalCount / (double)request.dto.PageSize);
             var mapping = mapper.Map<List<CustomersDto>>(response);
 
-            var PaginationList = new PaginationList<CustomersDto>(mapping, request.dto.PageSize, totalPages);
+            var PaginationList = new PaginationList<CustomersDto>(mapping, request.dto.PageNumber, totalPages, totalCount);
 
             return Result<PaginationList<CustomersDto>>.Success(PaginationList, 200);
 

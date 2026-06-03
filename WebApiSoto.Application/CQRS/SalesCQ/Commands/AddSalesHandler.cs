@@ -58,7 +58,15 @@ namespace WebApiSoto.Application.CQRS.SalesCQ.Commands
 
                 sale.SaleTotal = sale.SaleDetails.Sum(x => x.LineAmount);
                 sale.SaleDate = DateTime.Now;
+                var newInvoice = mapper.Map<Invoice>(sale);
+                sale.Invoice = newInvoice;
                 var addedSale = await context.Sales.AddSaleAsync(sale, ct);
+                
+
+                await context.SaveChangesAsync(ct);
+
+                
+
                 await context.SaveChangesAsync(ct);
                 var newSale = await context.Sales.GetByIdAsync(addedSale.SaleId, ct);
                 await context.CommitTransactionAsync(ct);

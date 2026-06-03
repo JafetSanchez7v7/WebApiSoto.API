@@ -11,6 +11,7 @@ namespace WebApiSoto.Application.Interfaces
     public interface IProductRepository
     {
         Task<IEnumerable<Products>> GetAllAsync( FiltersDto dto, CancellationToken ct);
+        Task<int> CountAsync(FiltersDto dto, CancellationToken ct);
         Task<Products?> GetByIdAsync(int id, CancellationToken ct);
         Task<Products?> GetByNameAsync(string name, CancellationToken ct);
         Task<Products> AddAsync(Products entity, CancellationToken ct);

@@ -13,6 +13,7 @@ namespace WebApiSoto.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin,Gerent,Operator")]
     public class ProductsController : ApiController
     {
         private readonly IMediator _mediator;
@@ -23,7 +24,6 @@ namespace WebApiSoto.API.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin,Gerent,Operator")]
         [EnableRateLimiting("Fixed")]
         public async Task<IActionResult> GetProducts([FromQuery] FiltersDto dto, IValidator<FiltersDto> validator, CancellationToken ct)
         {

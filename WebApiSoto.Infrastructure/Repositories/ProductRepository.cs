@@ -46,6 +46,25 @@ namespace WebApiSoto.Infrastructure.Repositories
             return response;
         }
 
+        public async Task<int> CountAsync(FiltersDto dto, CancellationToken ct)
+        {
+            var query = _context.Products
+                .AsNoTracking()
+                .Include(p => p.Category)
+                .Include(p => p.Supplier)
+                .AsQueryable();
+            if (!string.IsNullOrEmpty(dto.Name))
+            {
+                query = query.Where(x => x.ProductName.Contains(dto.Name));
+            }
+            if (dto.IsActive.HasValue)
+            {
+                query = query.Where(x => x.IsActive == dto.IsActive.Value);
+            }
+
+            return await query.CountAsync(ct);
+        }
+
         public async Task<Products?> GetByIdAsync(int id, CancellationToken ct)
         {
             return await _context.Products

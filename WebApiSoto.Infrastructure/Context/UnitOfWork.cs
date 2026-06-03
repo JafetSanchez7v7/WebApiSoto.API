@@ -26,6 +26,7 @@ namespace WebApiSoto.Infrastructure.Context
             _serviceProvider = ser;
         }
         //PROPIEDADES DE NAVEGACION
+        public IInvoiceRepository Invoice => _serviceProvider.GetRequiredService<IInvoiceRepository>();
         public ICustomersRepository Customers => _serviceProvider.GetRequiredService<ICustomersRepository>();
         public IUsersRepository User => _serviceProvider.GetRequiredService<IUsersRepository>();
         public ICategoryRepository Category => _serviceProvider.GetRequiredService<ICategoryRepository>();

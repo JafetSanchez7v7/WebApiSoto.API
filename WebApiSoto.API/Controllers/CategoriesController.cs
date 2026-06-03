@@ -56,7 +56,7 @@ namespace WebApiSoto.API.Controllers
             if (!response.IsSuccess)
                 return HandleResult(response);
 
-            return CreatedAtAction(nameof(GetById), new { id = response.Value.Id }, response);
+            return CreatedAtAction(nameof(GetById), new { id = response.Value.CategoryId }, response);
         }
         [Authorize(Roles = "Admin,Gerent")]
         [HttpPut("{id}")]

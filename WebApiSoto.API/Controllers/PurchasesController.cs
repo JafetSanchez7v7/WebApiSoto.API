@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
@@ -11,6 +12,7 @@ namespace WebApiSoto.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin,Gerent,Operator")]
     public class PurchasesController : ApiController
     {
         private readonly IMediator _mediator;
@@ -20,7 +22,7 @@ namespace WebApiSoto.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPurchases(FilterPurchasesDto dto, CancellationToken ct)
+        public async Task<IActionResult> GetPurchases([FromQuery]FilterPurchasesDto dto, CancellationToken ct)
         {
             var query = new GetPurchasesQuery(dto);
             var result = await _mediator.Send(query, ct);
