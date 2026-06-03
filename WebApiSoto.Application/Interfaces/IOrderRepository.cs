@@ -15,5 +15,6 @@ namespace WebApiSoto.Application.Interfaces
         Task AddAsync(Order order, CancellationToken ct);
         Task<Order?> GetToUpdateAsync(int id, CancellationToken ct);
 
+        Task<int> CountAsync(CancellationToken ct);
     }
 }
