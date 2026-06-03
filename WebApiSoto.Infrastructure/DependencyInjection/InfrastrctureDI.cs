@@ -34,6 +34,8 @@ namespace WebApiSoto.Infrastructure.DependencyInjection
             services.AddScoped<IPurchasesRepository, PurchaseRespository>();
             services.AddScoped<ISalesRepository, SaleRepository>();
             services.AddScoped<IPersonalizedProductRepository, PersonalizedProductRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+
             services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),b=> b.MigrationsAssembly("WebApiSoto.Infrastructure"));
