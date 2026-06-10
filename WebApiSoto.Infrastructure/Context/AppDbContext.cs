@@ -147,6 +147,7 @@ namespace WebApiSoto.Infrastructure.Context
                 entity.HasKey(e => e.OrderDetailId).HasName("PK__OrderDet__D3B9D36C0894F321");
                 entity.Property(e => e.SalePrice).HasColumnType("decimal(10, 2)");
                 entity.Property(e => e.Total).HasColumnType("decimal(10, 2)");
+               
                 entity.Property(e => e.Volume).HasColumnType("decimal(10, 2)");
 
                 entity.HasOne(d => d.Order).WithMany(p => p.OrderDetails)
