@@ -3,6 +3,7 @@ using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using WebApiSoto.Application.Common.DTOs.Sales;
@@ -17,6 +18,7 @@ namespace WebApiSoto.Application.CQRS.SalesCQ.Commands
     {
         public async Task<Result<SaleDto>> Handle(AddSaleCommand request, CancellationToken ct)
         {
+            //HOLA
             var existingCustomer = await context.Customers.GetByIdAsync(request.dto.CustomerId, ct);
             if (existingCustomer is null || !existingCustomer.IsActive)
                 return Result<SaleDto>.Failure(false, "El cliente seleccionado no existe o esta inactivo", 400);
@@ -43,7 +45,7 @@ namespace WebApiSoto.Application.CQRS.SalesCQ.Commands
                 var sale = mapper.Map<Sale>(request.dto);
                 var inventories = await context.Inventory.GetWhereAsync(i => productsToSell.Contains(i.ProductId), ct);
                 var stockMap = inventories.ToDictionary(i => i.ProductId);
-
+                var priceMap = new Dictionary<int, decimal>();
                 foreach (var detail in sale.SaleDetails)
                 {
                     if (detail.ProductId is null || !stockMap.TryGetValue(detail.ProductId.Value, out var inventory) || detail.Quantity > inventory.Quantity)
@@ -51,9 +53,12 @@ namespace WebApiSoto.Application.CQRS.SalesCQ.Commands
                         await context.RollbackTransactionAsync(ct);
                         return Result<SaleDto>.Failure(false, "Stock insuficiente", 400);
                     }
+                    
+                   
 
                     inventory.Quantity -= detail.Quantity;
                     detail.LineAmount = detail.Quantity * inventory.SalePrice;
+                    detail.SalePrice = inventory.SalePrice.Value;
                 }
 
                 sale.SaleTotal = sale.SaleDetails.Sum(x => x.LineAmount);
@@ -72,6 +77,7 @@ namespace WebApiSoto.Application.CQRS.SalesCQ.Commands
                 await context.CommitTransactionAsync(ct);
 
                 var mapped = mapper.Map<SaleDto>(newSale);
+              
                 return Result<SaleDto>.Success(mapped, 201);
             }
             catch (Exception)

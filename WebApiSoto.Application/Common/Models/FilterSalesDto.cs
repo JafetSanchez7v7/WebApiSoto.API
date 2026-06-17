@@ -7,7 +7,7 @@ namespace WebApiSoto.Application.Common.Models
     {
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 8;
-        public int? CustomerId { get; set; }
+        public string? CustomerName { get; set; }
         [Range(0, 10000, ErrorMessage = "Por Favor ingrese un numero mayor a 0")]
         public decimal? MaxTotal { get; set; }
         [Range(0, 10000, ErrorMessage = "Por Favor ingrese un numero mayor a 0")]

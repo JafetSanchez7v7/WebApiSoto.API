@@ -105,6 +105,6 @@ namespace WebApiSoto.Infrastructure.Repositories
                 .Include(p => p.Supplier)
                 .Where(predicate)
                 .ToListAsync(ct);
-        }
+        } 
     }
 }

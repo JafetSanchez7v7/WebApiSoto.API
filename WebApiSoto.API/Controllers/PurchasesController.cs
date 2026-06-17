@@ -12,7 +12,7 @@ namespace WebApiSoto.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin,Gerent,Operator")]
+  //  [Authorize(Roles = "Admin,Gerent,Operator")]
     public class PurchasesController : ApiController
     {
         private readonly IMediator _mediator;

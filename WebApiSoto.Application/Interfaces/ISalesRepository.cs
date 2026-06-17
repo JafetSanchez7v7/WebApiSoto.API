@@ -11,5 +11,6 @@ namespace WebApiSoto.Application.Interfaces
         Task<Sale> AddSaleAsync(Sale sale, CancellationToken ct);
         Task<Sale?> GetByIdAsync(int id, CancellationToken ct);
         Task<IEnumerable<Sale>> GetSalesAsync(FilterSalesDto dto, CancellationToken ct);
+        Task<int> CountAsync(FilterSalesDto dto, CancellationToken ct);
     }
 }
