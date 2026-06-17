@@ -1,7 +1,4 @@
-using AutoMapper;
 using MediatR;
-using System.Threading;
-using System.Threading.Tasks;
 using WebApiSoto.Application.Common.Models;
 using WebApiSoto.Application.Interfaces;
 
@@ -18,11 +15,15 @@ namespace WebApiSoto.Application.CQRS.CategoriesCQ.Commands
 
         public async Task<Result<Unit>> Handle(DeactivateCategoryCommand request, CancellationToken ct)
         {
-            var exitantCategory = await _uow.Category.GetByIdAsync(request.Id, ct);
-            if (exitantCategory is null)
+            var category = await _uow.Category.GetToUpdateAsync(request.Id, ct);
+
+            if (category is null)
                 return Result<Unit>.Failure(false, "Category not found", 404);
-            if(!exitantCategory.IsActive)
-                return Result<Unit>.Failure(false, "Category is already deactivated", 400);
+
+            category.IsActive = !category.IsActive;
+
+            await _uow.Category.UpdateAsync(ct);
+
             return Result<Unit>.Success(Unit.Value, 204);
         }
     }

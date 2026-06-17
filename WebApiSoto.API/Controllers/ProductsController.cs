@@ -24,7 +24,7 @@ namespace WebApiSoto.API.Controllers
         }
 
         [HttpGet]
-        [EnableRateLimiting("Fixed")]
+        //[EnableRateLimiting("Fixed")]
         public async Task<IActionResult> GetProducts([FromQuery] FiltersDto dto, IValidator<FiltersDto> validator, CancellationToken ct)
         {
             var validation = validator.Validate(dto);
@@ -77,15 +77,8 @@ namespace WebApiSoto.API.Controllers
         }
 
         [HttpPatch("{id}")]
-        public async Task<IActionResult> DeActivateProduct(int id, [FromBody] DeActivateProductCommand command, [FromServices] IValidator<DeActivateProductCommand> validator, CancellationToken ct)
+        public async Task<IActionResult> DeActivateProduct(int id, CancellationToken ct)
         {
-            var validation = validator.Validate(command);
-            if (!validation.IsValid)
-            {
-                var errors = validation.Errors.Select(e => e.ErrorMessage).ToList();
-                return BadRequest(errors);
-            }
-
             var response = await _mediator.Send(new DeActivateProductCommand(id), ct);
             return HandleResult(response);
         }
