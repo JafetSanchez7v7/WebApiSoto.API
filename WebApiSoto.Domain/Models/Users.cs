@@ -19,9 +19,9 @@ namespace WebApiSoto.Domain.Models
 
         public  string WhichRole() => (IsAdmin, IsOperator, IsGerent) switch
         {
-            (true, _, _) => "Admin",
-            (_, true, _) => "Operator",
-            (_, _, true) => "Gerent",
+            (true, _, _) => "Administrador",
+            (_, true, _) => "Cajero",
+            (_, _, true) => "Gerente",
             _ => "User" 
         };
 

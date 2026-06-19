@@ -89,14 +89,12 @@ namespace WebApiSoto.API.Controllers
 
         }
 
-        [HttpPatch("{id}")]
-        public async Task<IActionResult> DeActivateUser(int id,[FromBody] DeActivateUserCommand command, [FromServices] IValidator<DeActivateUserCommand> validator, CancellationToken ct)
+        [HttpPatch("{id}/deactivate") ]
+        public async Task<IActionResult> DeActivateUser(int id, [FromServices] IValidator<DeActivateUserCommand> validator, CancellationToken ct)
         {
-            var validation = validator.Validate(command);
-            if (!validation.IsValid)
+            if(id < 0)
             {
-                var errors= validation.Errors.Select(m => m.ErrorMessage).ToList();
-                return BadRequest(errors);
+                return BadRequest("proporcione un id valido");
             }
 
             var response = await _mediator.Send(new DeActivateUserCommand(id),ct );
