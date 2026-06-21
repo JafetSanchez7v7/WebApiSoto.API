@@ -15,6 +15,7 @@ namespace WebApiSoto.Application.Interfaces
         Task<Customers?> GetByIdAsync(int id, CancellationToken ct);
         Task<Customers?> GetByNameAsync(string name, CancellationToken ct);
         Task<Customers?> GetToUpdateAsync(int id, CancellationToken ct);
+        Task<Customers?> GetByDNI(string  dNI, CancellationToken ct);
 
         // Nuevos métodos para CRUD / patch
         Task<Customers> AddAsync(Customers customer, CancellationToken ct);

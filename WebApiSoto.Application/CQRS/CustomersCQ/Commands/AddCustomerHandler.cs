@@ -19,9 +19,14 @@ namespace WebApiSoto.Application.CQRS.CustomersCQ.Commands
     {
         public async Task<Result<CustomersDto>> Handle(AddCustommerCommand request, CancellationToken ct)
         {
+
+            var existantdni = await context.Customers.GetByDNI(request.dto.DNI, ct);
+            if(existantdni is not null)
+                return Result<CustomersDto>.Failure(false, "El dni ya esta en uso", 409);
             var existantCustomer = await context.Customers.GetByNameAsync(request.dto.Name, ct);
             if (existantCustomer is not null)
                 return Result<CustomersDto>.Failure(false, "El nombre de este usuario ya existe", 409);
+
             //tenia un error feo con automapper asi que 
            var mapped = mapper.Map<Customers>(request.dto);
 
