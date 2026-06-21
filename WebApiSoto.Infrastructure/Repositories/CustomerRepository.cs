@@ -45,7 +45,13 @@ public class CustomerRepository: ICustomersRepository
         {
             query = query.Where(c => c.IsActive == dto.IsActive.Value);
         }
+        
         return await query.CountAsync(ct);
+    }
+
+    public async Task<Customers?>GetByDNI(string dNI, CancellationToken ct)
+    {
+        return await _context.Customers.AsNoTracking().FirstOrDefaultAsync(x => x.Cedula == dNI);
     }
 
     public async Task<Customers?> GetByIdAsync(int id, CancellationToken ct)

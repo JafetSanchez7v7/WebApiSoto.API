@@ -14,7 +14,8 @@ namespace WebApiSoto.Application.Interfaces
         Task<IEnumerable<Order>> GetByDateRangeAsync(DateTime start, DateTime end, FilterOrderDto dto, CancellationToken ct);
         Task AddAsync(Order order, CancellationToken ct);
         Task<Order?> GetToUpdateAsync(int id, CancellationToken ct);
+        Task<IEnumerable<Order>> GetAll(FilterOrderDto dto, CancellationToken ct);
 
-        Task<int> CountAsync(CancellationToken ct);
+        Task<int> CountAsync(FilterOrderDto dto,CancellationToken ct);
     }
 }

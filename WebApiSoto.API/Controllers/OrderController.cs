@@ -4,6 +4,7 @@ using WebApiSoto.Application.Common.DTOs.Order;
 using WebApiSoto.Application.Common.DTOs.Order;
 using WebApiSoto.Application.Common.Models;
 using WebApiSoto.Application.CQRS.OrdersCQ;
+using WebApiSoto.Application.CQRS.OrdersCQ.Queries;
 using static WebApiSoto.Application.CQRS.OrdersCQ.Commands.CreateOrderHandler;
 
 using static WebApiSoto.Application.CQRS.OrdersCQ.Queries.GetByDateRangeHandler;
@@ -21,6 +22,12 @@ namespace WebApiSoto.API.Controllers
         {
             _mediator = mediator;
         }
+        [HttpGet]
+        public async Task<IActionResult> GetAll([FromQuery] FilterOrderDto dto, CancellationToken ct)
+        {
+            var response = await _mediator.Send(new GetOrdersQuery(dto), ct);
+            return HandleResult(response);
+        }
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id, CancellationToken ct)
@@ -32,10 +39,10 @@ namespace WebApiSoto.API.Controllers
         [HttpGet("byDate")]
         public async Task<IActionResult> GetByDate([FromQuery] FilterOrderDto dto, CancellationToken ct)
         {
-            if (dto.StartDate is null || dto.EndDate is null)
+            if (dto.from is null || dto.to is null)
                 return BadRequest("Las fechas de inicio y fin son requeridas");
 
-            var result = await _mediator.Send(new GetOrdersByDateQuery(dto.StartDate.Value, dto.EndDate.Value, dto), ct);
+            var result = await _mediator.Send(new GetOrdersByDateQuery(dto.from.Value, dto.to.Value, dto), ct);
             return HandleResult(result);
         }
 
