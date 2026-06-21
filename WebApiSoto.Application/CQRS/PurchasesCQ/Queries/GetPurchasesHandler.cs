@@ -23,7 +23,8 @@ namespace WebApiSoto.Application.CQRS.PurchasesCQ.Queries
                 return Result<PaginationList<PurchaseDto>>.Failure(true, "No hay registros", 200);
 
             var totalCount = await context.Purchases.CountAsync(request.dto, ct);
-            int totalPages = (int)Math.Ceiling((double)totalCount / request.dto.PageSize);
+            var pageSize = request.dto.PageSize > 0 ? request.dto.PageSize : 8;
+            int totalPages = (int)Math.Ceiling((double)totalCount / (double)pageSize);
             var mapped = mapper.Map<List<PurchaseDto>>(response);
             var pagination = new PaginationList<PurchaseDto>(mapped, request.dto.PageNumber, totalPages, totalCount);
             return Result<PaginationList<PurchaseDto>>.Success(pagination, 200);

@@ -12,7 +12,7 @@ namespace WebApiSoto.Application.Common.Models
         {
             Items = items;
             PageIndex = pageIndex;
-            TotalPages = totalRegisters;
+            TotalPages = totalPages;
             TotalRegisters = totalRegisters;
         }
 
