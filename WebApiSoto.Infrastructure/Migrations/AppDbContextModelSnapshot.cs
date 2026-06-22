@@ -24,29 +24,38 @@ namespace WebApiSoto.Infrastructure.Migrations
 
             modelBuilder.Entity("Customers", b =>
                 {
-                    b.Property<int>("CategoryId")
+                    b.Property<int>("CustomerId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CustomerId"));
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Cedula")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Icon")
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CustomerAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CustomerName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("CategoryId");
+                    b.HasKey("CustomerId");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("WebApiSoto.Domain.Models.Categories", b =>
@@ -58,7 +67,9 @@ namespace WebApiSoto.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"));
 
                     b.Property<string>("Description")
-                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Icon")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
@@ -468,14 +479,14 @@ namespace WebApiSoto.Infrastructure.Migrations
                     b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("ProductPrice")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<int?>("Quantity")
                         .HasColumnType("int");
 
                     b.Property<int?>("SaleId")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("SalePrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id")
                         .HasName("PK__SaleDeta__3214EC0774E07D63");

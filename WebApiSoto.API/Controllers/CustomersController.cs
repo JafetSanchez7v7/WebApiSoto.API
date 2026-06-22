@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApiSoto.Application.Common.DTOs.Customers;
@@ -18,6 +19,8 @@ namespace WebApiSoto.API.Controllers
         {
             _mediator = mediator;
         }
+
+        [Authorize(Roles = "Admin,Gerent,Operator")]
         [HttpGet]
         public async Task<IActionResult>GetCustomersAsync([FromQuery]FiltersDto filters, CancellationToken ct, IValidator<FiltersDto> validator)
         {
@@ -31,12 +34,15 @@ namespace WebApiSoto.API.Controllers
             return HandleResult(response);
         }
 
+        [Authorize(Roles = "Admin,Gerent,Operator")]
+
         [HttpGet("{id}")]
         public async Task<IActionResult>GetById(int id, CancellationToken ct)
         {
             var response = await _mediator.Send(new GetCustomerByIdQuery(id), ct);
             return HandleResult(response); 
         }
+        [Authorize(Roles = "Admin,Gerent,Operator")]
 
         [HttpPost]
         public async Task<IActionResult> AddCustomer([FromBody] CreateCustomerDto dto, [FromServices] IValidator<CreateCustomerDto> validator, CancellationToken ct)
@@ -55,6 +61,7 @@ namespace WebApiSoto.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin,Gerent,Operator")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCustomer(int id, [FromBody] UpdateCustomerDto dto , [FromServices] IValidator<UpdateCustomerDto> validator, CancellationToken ct)
         {
@@ -65,6 +72,7 @@ namespace WebApiSoto.API.Controllers
             return HandleResult(response);
         }
 
+        [Authorize(Roles = "Admin,Gerent,Operator")]
         [HttpPatch("{id}")]
         public async Task<IActionResult>DeactiveCustomer(int id, CancellationToken ct)
         {
