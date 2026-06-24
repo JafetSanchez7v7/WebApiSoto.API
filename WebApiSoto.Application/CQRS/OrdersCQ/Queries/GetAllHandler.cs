@@ -20,9 +20,9 @@ namespace WebApiSoto.Application.CQRS.OrdersCQ.Queries
             if (!lista.Any())
                 return Result<PaginationList<OrderDto>>.Failure(true, "no hay registros", 200);
 
-            var mapped = mapper.Map<IEnumerable<OrderDto>>(lista).ToList();
+            var mapped = mapper.Map<List<OrderDto>>(lista);
 
-            var totalRegisters = await _context.Orders.CountAsync(request.dto,ct);
+            var totalRegisters = await _context.Orders.CountAsync(ct);
             var totalPages = (int)Math.Ceiling(totalRegisters / (double)request.dto.PageSize);
             var pagination = new PaginationList<OrderDto>(mapped, request.dto.PageNumber, totalPages, totalRegisters);
 

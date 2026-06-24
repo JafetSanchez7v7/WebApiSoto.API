@@ -21,7 +21,6 @@ namespace WebApiSoto.Infrastructure.Repositories
             _context = context;
         }
 
-
         private async Task CargarProductos(IEnumerable<Order> orders, CancellationToken ct)
         {
             var allDetails = orders.SelectMany(o => o.OrderDetails).ToList();
@@ -107,7 +106,7 @@ namespace WebApiSoto.Infrastructure.Repositories
                 .FirstOrDefaultAsync(x => x.OrderId == id, ct);
         }
 
-        // ── CountAsync ────────────────────────────────────────────────────────
+        // ── CountAsync (con filtros) ─────────────────────────────────────────
         public async Task<int> CountAsync(FilterOrderDto dto, CancellationToken ct)
         {
             var query = _context.Orders.AsNoTracking().AsQueryable();
@@ -122,6 +121,20 @@ namespace WebApiSoto.Infrastructure.Repositories
                 query = query.Where(x => x.OrderDate <= dto.to.Value.AddDays(1).AddTicks(-1));
 
             return await query.CountAsync(ct);
+        }
+
+        // ── UpdateAsync (de tu compañero) ────────────────────────────────────
+        public async Task UpdateAsync(Order order, CancellationToken ct)
+        {
+            var oldDetails = _context.OrderDetails.Where(x => x.OrderId == order.OrderId);
+            _context.OrderDetails.RemoveRange(oldDetails);
+            _context.Orders.Update(order);
+        }
+
+        // ── CountAsync sin filtros (de tu compañero) ─────────────────────────
+        public async Task<int> CountAsync(CancellationToken ct)
+        {
+            return await _context.Orders.CountAsync(ct);
         }
 
         // ── GetAll ────────────────────────────────────────────────────────────
@@ -140,7 +153,7 @@ namespace WebApiSoto.Infrastructure.Repositories
 
             var orders = await query
                 .Include(x => x.Customer)
-                .Include(x => x.OrderDetails)   
+                .Include(x => x.OrderDetails)
                 .Skip((dto.PageNumber - 1) * dto.PageSize)
                 .Take(dto.PageSize)
                 .ToListAsync(ct);

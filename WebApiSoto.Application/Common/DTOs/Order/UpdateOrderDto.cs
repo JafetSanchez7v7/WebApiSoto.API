@@ -3,17 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 namespace WebApiSoto.Application.Common.DTOs.Order
 {
-    public class OrderDetailDto
+    public class UpdateOrderDto
     {
-        public int OrderDetailId { get; set; }
         public int OrderId { get; set; }
+        public int CustomerId { get; set; }
+        public DateTime TimeDelivery { get; set; }
+        public List<UpdateOrderDetailDto> OrderDetails { get; set; } = new();
+
+    }
+
+    public class UpdateOrderDetailDto
+    {
         public int ProductId { get; set; }
-        public string? ProductName { get; set; }
-        public decimal SalePrice { get; set; }
         public int Quantity { get; set; }
-        public decimal? Volume { get; set; }
-        public decimal Total { get; set; }
+        public int Volume { get; set; }
     }
 }

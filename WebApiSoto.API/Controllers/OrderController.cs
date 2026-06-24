@@ -6,7 +6,7 @@ using WebApiSoto.Application.Common.Models;
 using WebApiSoto.Application.CQRS.OrdersCQ;
 using WebApiSoto.Application.CQRS.OrdersCQ.Queries;
 using static WebApiSoto.Application.CQRS.OrdersCQ.Commands.CreateOrderHandler;
-
+using static WebApiSoto.Application.CQRS.OrdersCQ.Commands.UpdateOrderHandler;
 using static WebApiSoto.Application.CQRS.OrdersCQ.Queries.GetByDateRangeHandler;
 using static WebApiSoto.Application.CQRS.OrdersCQ.Queries.GetByIdHandler;
 
@@ -23,10 +23,18 @@ namespace WebApiSoto.API.Controllers
             _mediator = mediator;
         }
         [HttpGet]
+
         public async Task<IActionResult> GetAll([FromQuery] FilterOrderDto dto, CancellationToken ct)
         {
-            var response = await _mediator.Send(new GetOrdersQuery(dto), ct);
+            var query = new GetOrdersQuery(dto);
+            var response = await _mediator.Send(query, ct);
             return HandleResult(response);
+        }
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] UpdateOrderDto dto, CancellationToken ct)
+        {
+            var result = await _mediator.Send(new UpdateOrderCommand(dto), ct);
+            return HandleResult(result);
         }
 
         [HttpGet("{id:int}")]
