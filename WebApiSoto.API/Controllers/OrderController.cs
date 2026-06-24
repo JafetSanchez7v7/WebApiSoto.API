@@ -23,9 +23,11 @@ namespace WebApiSoto.API.Controllers
             _mediator = mediator;
         }
         [HttpGet]
+
         public async Task<IActionResult> GetAll([FromQuery] FilterOrderDto dto, CancellationToken ct)
         {
-            var response = await _mediator.Send(new GetOrdersQuery(dto), ct);
+            var query = new GetOrdersQuery(dto);
+            var response = await _mediator.Send(query, ct);
             return HandleResult(response);
         }
 
