@@ -15,7 +15,7 @@ namespace WebApiSoto.Application.Common.DTOs.Order
 
         public decimal SalePrice { get; set; }
         public int Quantity { get; set; }
-        public string? Volume { get; set; }
-        public decimal Total { get; set; }
+        public decimal? Volume { get; set; }
+        public decimal Total { get; set; }1
     }
 }

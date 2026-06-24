@@ -4,6 +4,7 @@ using WebApiSoto.Application.Common.DTOs.Order;
 using WebApiSoto.Application.Common.DTOs.Order;
 using WebApiSoto.Application.Common.Models;
 using WebApiSoto.Application.CQRS.OrdersCQ;
+using WebApiSoto.Application.CQRS.OrdersCQ.Queries;
 using static WebApiSoto.Application.CQRS.OrdersCQ.Commands.CreateOrderHandler;
 
 using static WebApiSoto.Application.CQRS.OrdersCQ.Queries.GetByDateRangeHandler;
@@ -20,6 +21,14 @@ namespace WebApiSoto.API.Controllers
         public OrdersController(IMediator mediator)
         {
             _mediator = mediator;
+        }
+        [HttpGet]
+
+        public async Task<IActionResult> GetAll([FromQuery] FilterOrderDto dto, CancellationToken ct)
+        {
+            var query = new GetOrdersQuery(dto);
+            var response = await _mediator.Send(query, ct);
+            return HandleResult(response);
         }
 
         [HttpGet("{id:int}")]
