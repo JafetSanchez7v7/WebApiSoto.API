@@ -17,7 +17,7 @@ using WebApiSoto.Infrastructure.Repositories;
 
 namespace WebApiSoto.API
 {
-    public class Program
+    public partial class Program
     {
         public static void Main(string[] args)
         {

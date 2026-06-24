@@ -9,8 +9,10 @@ namespace WebApiSoto.Application.Common.Models
 {
     public class FilterOrderDto
     {
-        public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
+        public DateTime? from { get; set; }
+        public DateTime? to { get; set; }
+        public string? CustomerName { get; set; }
+        public int? Status { get; set; }
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 8;
         public DateTime? from { get; set; }

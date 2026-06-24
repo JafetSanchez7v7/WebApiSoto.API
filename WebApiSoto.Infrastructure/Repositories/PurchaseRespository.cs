@@ -24,8 +24,8 @@ namespace WebApiSoto.Infrastructure.Repositories
                 .ThenInclude(z => z.Products)
                 .AsQueryable();
 
-            if (dto.SupplierId.HasValue && dto.SupplierId > 0)
-                query = query.Where(x => x.SupplierId == dto.SupplierId);
+            if (!string.IsNullOrEmpty(dto.SupplierName))
+                query = query.Where(x => x.Suppliers.Name == dto.SupplierName);
 
             if (dto.MinTotal.HasValue && dto.MinTotal > 0)
                 query = query.Where(x => x.TotalAmount >= dto.MinTotal.Value);
@@ -52,8 +52,8 @@ namespace WebApiSoto.Infrastructure.Repositories
         {
             var query = _context.Purchases.AsNoTracking().AsQueryable();
 
-            if (dto.SupplierId.HasValue && dto.SupplierId > 0)
-                query = query.Where(x => x.SupplierId == dto.SupplierId);
+            if (!string.IsNullOrEmpty(dto.SupplierName))
+                query = query.Where(x => x.Suppliers.Name == dto.SupplierName);
 
             if (dto.MinTotal.HasValue && dto.MinTotal > 0)
                 query = query.Where(x => x.TotalAmount >= dto.MinTotal.Value);

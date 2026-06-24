@@ -8,12 +8,12 @@ namespace WebApiSoto.Application.Common.Models
 {
     public class PaginationList<T>
     {
-        public PaginationList(List<T> items, int pageIndex, int totalPages, int totalCount)
+        public PaginationList(List<T> items, int pageIndex, int totalPages, int totalRegisters)
         {
             Items = items;
             PageIndex = pageIndex;
             TotalPages = totalPages;
-            TotalRegisters = totalCount;
+            TotalRegisters = totalRegisters;
         }
 
         public List<T> Items { get; set; }

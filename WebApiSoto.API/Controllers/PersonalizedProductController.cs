@@ -4,6 +4,7 @@ using WebApiSoto.Application.Common.DTOs.PersonalizedProduct;
 using WebApiSoto.Application.Common.Models;
 using WebApiSoto.Application.CQRS.PersonalizedProductCQ.Commands;
 using WebApiSoto.Application.CQRS.PersonalizedProductCQ.Queries;
+using static WebApiSoto.Application.CQRS.PersonalizedProductCQ.Queries.GetAllPersonalizedProduct;
 using static WebApiSoto.Application.CQRS.PersonalizedProductCQ.Queries.GetPersonalizedProductById;
 
 namespace WebApiSoto.API.Controllers
@@ -35,6 +36,21 @@ namespace WebApiSoto.API.Controllers
             if (!result.IsSuccess)
                 return HandleResult(result);
             return CreatedAtAction(nameof(GetById), new { id = result.Value!.PersonalizedId }, result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll([FromQuery] FiltersDto dto, CancellationToken ct)
+        {
+            var query = new GetAllPersonalizedProductsQuery(dto);
+            var result = await _mediator.Send(query, ct);
+            return HandleResult(result);
+        }
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Update(int id, [FromBody] UpdatePersonalizedProductDto dto, CancellationToken ct)
+        {
+            var command = new UpdatePersonalizedProductCommand(id, dto);
+            var result = await _mediator.Send(command, ct);
+            return HandleResult(result);
         }
     }
 }

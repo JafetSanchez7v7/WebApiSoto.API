@@ -35,8 +35,8 @@ namespace WebApiSoto.Infrastructure.Repositories
                 .ThenInclude(d => d.Product).AsQueryable();
 
             // Aplicacion de los filtros
-            if (dto.CustomerId.HasValue)
-                query = query.Where(i => i.Sale.CustomerId == dto.CustomerId.Value);
+            if (!string.IsNullOrEmpty(dto.CustomerName))
+                query = query.Where(i => i.Sale.Customer.CustomerName == dto.CustomerName);
             if (dto.MaxTotal.HasValue)
                 query = query.Where(i => i.TotalAmount <= dto.MaxTotal.Value);
             if (dto.MinTotal.HasValue)
@@ -124,8 +124,8 @@ namespace WebApiSoto.Infrastructure.Repositories
             var query = context.Invoices.AsNoTracking().AsQueryable();
 
             // Aplicacion de los filtros
-            if (dto.CustomerId.HasValue)
-                query = query.Where(i => i.Sale.CustomerId == dto.CustomerId.Value);
+            if (!string.IsNullOrEmpty(dto.CustomerName))
+                query = query.Where(i => i.Sale.Customer.CustomerName == dto.CustomerName);
             if (dto.MaxTotal.HasValue)
                 query = query.Where(i => i.TotalAmount <= dto.MaxTotal.Value);
             if (dto.MinTotal.HasValue)

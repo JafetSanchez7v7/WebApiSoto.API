@@ -14,5 +14,7 @@ namespace WebApiSoto.Application.Interfaces
         Task<Purchase> GetByIdAsync(int id, CancellationToken ct);
         Task<IEnumerable<Purchase>> GetPurchasesAsync(FilterPurchasesDto dto, CancellationToken ct);
         Task<int> CountAsync(FilterPurchasesDto dto, CancellationToken ct);
+
+        
     }
 }

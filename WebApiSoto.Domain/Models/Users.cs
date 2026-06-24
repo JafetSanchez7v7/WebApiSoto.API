@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
 namespace WebApiSoto.Domain.Models
 {
     public class Users
@@ -17,18 +16,12 @@ namespace WebApiSoto.Domain.Models
         public bool IsOperator { get; set; }
         public bool IsActive { get; set; }
 
-        public  string WhichRole() => (IsAdmin, IsOperator, IsGerent) switch
+        public string WhichRole() => (IsAdmin, IsOperator, IsGerent) switch
         {
             (true, _, _) => "Admin",
             (_, true, _) => "Operator",
             (_, _, true) => "Gerent",
-            _ => "User" 
+            _ => "User"
         };
-
-
-
-
     }
-
 }
-

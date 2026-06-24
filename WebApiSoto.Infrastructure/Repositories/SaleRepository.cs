@@ -20,8 +20,8 @@ namespace WebApiSoto.Infrastructure.Repositories
                 .ThenInclude(z => z.Product)
                 .AsQueryable();
 
-            if (dto.CustomerId.HasValue && dto.CustomerId > 0)
-                query = query.Where(x => x.CustomerId == dto.CustomerId);
+            if (!string.IsNullOrEmpty(dto.CustomerName))
+                query = query.Where(x => x.Customer.CustomerName == dto.CustomerName);
 
             if (dto.MinTotal.HasValue && dto.MinTotal > 0)
                 query = query.Where(x => x.SaleTotal >= dto.MinTotal.Value);
@@ -55,6 +55,30 @@ namespace WebApiSoto.Infrastructure.Repositories
         {
             var added = await _context.AddAsync(sale, ct);
             return added.Entity;
+        }
+
+        public async Task<int> CountAsync(FilterSalesDto dto, CancellationToken ct)
+        {
+            var query = _context.Sales.AsNoTracking().AsQueryable();
+
+            if (!string.IsNullOrEmpty(dto.CustomerName))
+                query = query.Where(x => x.Customer.CustomerName == dto.CustomerName);
+
+            if (dto.MinTotal.HasValue && dto.MinTotal > 0)
+                query = query.Where(x => x.SaleTotal >= dto.MinTotal.Value);
+
+            if (dto.MaxTotal.HasValue && dto.MaxTotal > 0)
+                query = query.Where(x => x.SaleTotal <= dto.MaxTotal.Value);
+
+            if (dto.from.HasValue)
+                query = query.Where(x => x.SaleDate >= dto.from.Value);
+
+            if (dto.to.HasValue)
+                query = query.Where(x => x.SaleDate <= dto.to.Value.AddDays(1).AddTicks(-1));
+
+            return await query.CountAsync(ct);
+
+             
         }
     }
 }

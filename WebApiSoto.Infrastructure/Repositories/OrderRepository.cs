@@ -71,9 +71,41 @@ namespace WebApiSoto.Infrastructure.Repositories
                 .FirstOrDefaultAsync(x => x.OrderId == id, ct);
         }
 
-        public async Task<int> CountAsync(CancellationToken ct)
+        public async Task<int> CountAsync(FilterOrderDto dto, CancellationToken ct)
         {
-            return await _context.Orders.CountAsync(ct);
+            var query = _context.Orders.AsNoTracking().
+                AsQueryable();
+
+            if (!string.IsNullOrEmpty(dto.CustomerName))
+                query = query.Where(x => x.Customer.CustomerName == dto.CustomerName);
+            if (dto.Status.HasValue)
+                query = query.Where(o => o.IsActive == dto.Status);
+            if (dto.from.HasValue)
+                query = query.Where(x => x.OrderDate >= dto.from.Value);
+
+            if (dto.to.HasValue)
+                query = query.Where(x => x.OrderDate <= dto.to.Value.AddDays(1).AddTicks(-1));
+
+            return await query.CountAsync(ct);
+        }
+        public async Task<IEnumerable<Order>> GetAll(FilterOrderDto dto, CancellationToken ct)
+        {
+            var query = _context.Orders.AsNoTracking().
+                Include(x => x.Customer).Include(x => x.OrderDetails)
+                    .ThenInclude(x => x.Product).AsQueryable();
+
+            if (!string.IsNullOrEmpty(dto.CustomerName))
+                query = query.Where(x => x.Customer.CustomerName == dto.CustomerName);
+            if (dto.Status.HasValue)
+                query = query.Where(o => o.IsActive == dto.Status);
+            if (dto.from.HasValue)
+                query = query.Where(x => x.OrderDate >= dto.from.Value);
+
+            if (dto.to.HasValue)
+                query = query.Where(x => x.OrderDate <= dto.to.Value.AddDays(1).AddTicks(-1));
+
+            return await query.Skip((dto.PageNumber - 1) * dto.PageSize).
+                Take(dto.PageSize).ToListAsync();
         }
     }
 }

@@ -41,10 +41,10 @@ namespace WebApiSoto.API.Controllers
         [HttpGet("byDate")]
         public async Task<IActionResult> GetByDate([FromQuery] FilterOrderDto dto, CancellationToken ct)
         {
-            if (dto.StartDate is null || dto.EndDate is null)
+            if (dto.from is null || dto.to is null)
                 return BadRequest("Las fechas de inicio y fin son requeridas");
 
-            var result = await _mediator.Send(new GetOrdersByDateQuery(dto.StartDate.Value, dto.EndDate.Value, dto), ct);
+            var result = await _mediator.Send(new GetOrdersByDateQuery(dto.from.Value, dto.to.Value, dto), ct);
             return HandleResult(result);
         }
 

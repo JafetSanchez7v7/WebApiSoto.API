@@ -6,13 +6,15 @@ public class OrderProfile : Profile
 {
     public OrderProfile()
     {
-        CreateMap<OrderDetail, OrderDetailDto>();
-        CreateMap<Order, OrderDto>();
+        
+        CreateMap<Order, OrderDto>().
+            ForMember(dest => dest.OrderDetails, OPT => OPT.MapFrom(src => src.OrderDetails.ToList()))
+            .ForMember(dest => dest.CustomerName, opt => opt.MapFrom(src => src.Customer != null ? src.Customer.CustomerName : null));
+
 
         CreateMap<OrderDetail, OrderDetailDto>()
     .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product != null ? src.Product.ProductName : null));
 
-        CreateMap<Order, OrderDto>()
-            .ForMember(dest => dest.CustomerName, opt => opt.MapFrom(src => src.Customer != null ? src.Customer.CustomerName : null));
-    }
+       
+     }       
 }

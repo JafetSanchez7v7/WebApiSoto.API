@@ -12,7 +12,7 @@ namespace WebApiSoto.API.Middleware
             }
             catch (ApiException ex)
             {
-                logger.LogWarning("Ha Ocurrido un error de persistencia");
+                logger.LogWarning("Ha Ocurrido un error manejado");
                 context.Response.StatusCode = ex.StatusCode;
                 await context.Response.WriteAsync(ex.Message);
                

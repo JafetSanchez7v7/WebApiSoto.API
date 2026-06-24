@@ -22,31 +22,7 @@ namespace WebApiSoto.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("WebApiSoto.Domain.Models.Categories", b =>
-                {
-                    b.Property<int>("CategoryId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("CategoryId");
-
-                    b.ToTable("Categories");
-                });
-
-            modelBuilder.Entity("WebApiSoto.Domain.Models.Customers", b =>
+            modelBuilder.Entity("Customers", b =>
                 {
                     b.Property<int>("CustomerId")
                         .ValueGeneratedOnAdd()
@@ -80,6 +56,32 @@ namespace WebApiSoto.Infrastructure.Migrations
                     b.HasKey("CustomerId");
 
                     b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("WebApiSoto.Domain.Models.Categories", b =>
+                {
+                    b.Property<int>("CategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Icon")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CategoryId");
+
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("WebApiSoto.Domain.Models.Inventory", b =>
@@ -140,7 +142,9 @@ namespace WebApiSoto.Infrastructure.Migrations
                     b.HasKey("InvoiceId")
                         .HasName("PK__Invoice__D796AAB5080B3930");
 
-                    b.HasIndex("SaleId");
+                    b.HasIndex("SaleId")
+                        .IsUnique()
+                        .HasFilter("[SaleId] IS NOT NULL");
 
                     b.ToTable("Invoice", (string)null);
                 });
@@ -165,13 +169,12 @@ namespace WebApiSoto.Infrastructure.Migrations
                     b.Property<int?>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<decimal?>("SalePrice")
-                        .HasColumnType("decimal(10, 2)");
-
                     b.HasKey("Id")
                         .HasName("PK__InvoiceD__3214EC075F758FC1");
 
                     b.HasIndex("InvoiceId");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("InvoiceDetails");
                 });
@@ -216,29 +219,28 @@ namespace WebApiSoto.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
 
-                    b.Property<int?>("CustomerId")
+                    b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
-                    b.Property<bool?>("Delivery")
-                        .HasColumnType("bit");
+                    b.Property<decimal>("HalfPayment")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<bool?>("HalfPayment")
-                        .HasColumnType("bit");
+                    b.Property<int>("IsActive")
+                        .HasColumnType("int");
 
-                    b.Property<bool?>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("OrderDate")
+                    b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime");
 
-                    b.Property<DateTime?>("TimeDelivery")
+                    b.Property<DateTime>("TimeDelivery")
                         .HasColumnType("datetime");
 
-                    b.Property<decimal?>("TotalAmount")
-                        .HasColumnType("decimal(10, 2)");
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(18, 2)");
 
                     b.HasKey("OrderId")
                         .HasName("PK__Orders__C3905BCF865F7C3B");
+
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("Orders");
                 });
@@ -251,30 +253,30 @@ namespace WebApiSoto.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderDetailId"));
 
-                    b.Property<int?>("OrderId")
+                    b.Property<int>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ProductId")
+                    b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Quantity")
+                    b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<decimal?>("SalePrice")
+                    b.Property<decimal>("SalePrice")
                         .HasColumnType("decimal(10, 2)");
 
-                    b.Property<decimal?>("Total")
+                    b.Property<decimal>("Total")
                         .HasColumnType("decimal(10, 2)");
 
-                    b.Property<string>("Volume")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
+                    b.Property<decimal>("Volume")
+                        .HasColumnType("decimal(10, 2)");
 
                     b.HasKey("OrderDetailId")
                         .HasName("PK__OrderDet__D3B9D36C0894F321");
 
                     b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("OrderDetails");
                 });
@@ -331,9 +333,6 @@ namespace WebApiSoto.Infrastructure.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(200)");
 
-                    b.Property<int?>("OrderId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
@@ -343,7 +342,7 @@ namespace WebApiSoto.Infrastructure.Migrations
                     b.HasKey("PersonalizedId")
                         .HasName("PK__Personal__96BC6947BCFFAFB1");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("PersonalizedProducts");
                 });
@@ -416,9 +415,6 @@ namespace WebApiSoto.Infrastructure.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ProductsProductId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("PurchaseId")
                         .HasColumnType("int");
 
@@ -437,7 +433,7 @@ namespace WebApiSoto.Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("PK__Purchase__3214EC072660EA2C");
 
-                    b.HasIndex("ProductsProductId");
+                    b.HasIndex("ProductId");
 
                     b.HasIndex("PurchaseId");
 
@@ -488,6 +484,9 @@ namespace WebApiSoto.Infrastructure.Migrations
 
                     b.Property<int?>("SaleId")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("SalePrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id")
                         .HasName("PK__SaleDeta__3214EC0774E07D63");
@@ -575,8 +574,8 @@ namespace WebApiSoto.Infrastructure.Migrations
             modelBuilder.Entity("WebApiSoto.Domain.Models.Invoice", b =>
                 {
                     b.HasOne("WebApiSoto.Domain.Models.Sale", "Sale")
-                        .WithMany()
-                        .HasForeignKey("SaleId")
+                        .WithOne("Invoice")
+                        .HasForeignKey("WebApiSoto.Domain.Models.Invoice", "SaleId")
                         .HasConstraintName("FK__Invoice__SaleId__76969D2E");
 
                     b.Navigation("Sale");
@@ -589,7 +588,24 @@ namespace WebApiSoto.Infrastructure.Migrations
                         .HasForeignKey("InvoiceId")
                         .HasConstraintName("FK__InvoiceDe__Invoi__797309D9");
 
+                    b.HasOne("WebApiSoto.Domain.Models.Products", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId");
+
                     b.Navigation("Invoice");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("WebApiSoto.Domain.Models.Order", b =>
+                {
+                    b.HasOne("Customers", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("WebApiSoto.Domain.Models.OrderDetail", b =>
@@ -597,9 +613,19 @@ namespace WebApiSoto.Infrastructure.Migrations
                     b.HasOne("WebApiSoto.Domain.Models.Order", "Order")
                         .WithMany("OrderDetails")
                         .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
                         .HasConstraintName("FK__OrderDeta__Order__628FA481");
 
+                    b.HasOne("WebApiSoto.Domain.Models.Products", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Order");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("WebApiSoto.Domain.Models.Personalization", b =>
@@ -621,12 +647,12 @@ namespace WebApiSoto.Infrastructure.Migrations
 
             modelBuilder.Entity("WebApiSoto.Domain.Models.PersonalizedProduct", b =>
                 {
-                    b.HasOne("WebApiSoto.Domain.Models.Order", "Order")
-                        .WithMany("PersonalizedProducts")
-                        .HasForeignKey("OrderId")
-                        .HasConstraintName("FK__Personali__Order__66603565");
+                    b.HasOne("Customers", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .HasConstraintName("FK_PersonalizedProducts_Customers");
 
-                    b.Navigation("Order");
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("WebApiSoto.Domain.Models.Products", b =>
@@ -666,7 +692,9 @@ namespace WebApiSoto.Infrastructure.Migrations
                 {
                     b.HasOne("WebApiSoto.Domain.Models.Products", "Products")
                         .WithMany()
-                        .HasForeignKey("ProductsProductId");
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("WebApiSoto.Domain.Models.Purchase", "Purchase")
                         .WithMany("PurchaseDetails")
@@ -680,7 +708,7 @@ namespace WebApiSoto.Infrastructure.Migrations
 
             modelBuilder.Entity("WebApiSoto.Domain.Models.Sale", b =>
                 {
-                    b.HasOne("WebApiSoto.Domain.Models.Customers", "Customer")
+                    b.HasOne("Customers", "Customer")
                         .WithMany()
                         .HasForeignKey("CustomerId");
 
@@ -711,8 +739,6 @@ namespace WebApiSoto.Infrastructure.Migrations
             modelBuilder.Entity("WebApiSoto.Domain.Models.Order", b =>
                 {
                     b.Navigation("OrderDetails");
-
-                    b.Navigation("PersonalizedProducts");
                 });
 
             modelBuilder.Entity("WebApiSoto.Domain.Models.PersonalizedProduct", b =>
@@ -727,6 +753,9 @@ namespace WebApiSoto.Infrastructure.Migrations
 
             modelBuilder.Entity("WebApiSoto.Domain.Models.Sale", b =>
                 {
+                    b.Navigation("Invoice")
+                        .IsRequired();
+
                     b.Navigation("SaleDetails");
                 });
 #pragma warning restore 612, 618
