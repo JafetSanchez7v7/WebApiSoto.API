@@ -13,6 +13,8 @@ public partial class PersonalizedProduct
     public DateTime? CreationDate { get; set; }
     public decimal? SalePrice { get; set; }
     public int? ProductId { get; set; }
+    [ForeignKey("ProductId")]
+    public virtual Products? Products { get; set; }
     [ForeignKey("CustomerId")]
     public virtual Customers? Customer { get; set; }
     public virtual ICollection<Personalization> Personalizations { get; set; } = new List<Personalization>();

@@ -22,6 +22,7 @@ namespace WebApiSoto.Application.Common.MappingProfiles
                 .ForMember(dest => dest.CustomerId, opt => opt.MapFrom(src => src.CustomerId ?? 0))
                 .ForMember(dest => dest.CustomerName, opt => opt.MapFrom(src => src.Customer != null ? src.Customer.CustomerName : string.Empty))
                 .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId ?? 0))
+                .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Products != null ? src.Products.ProductName : string.Empty))
                 .ForMember(dest => dest.CreationDate, opt => opt.MapFrom(src => src.CreationDate ?? DateTime.UtcNow))
                 .ForMember(dest => dest.SalePrice, opt => opt.MapFrom(src => src.SalePrice ?? 0))
                 .ForMember(dest => dest.PersonalizationDetails, opt => opt.MapFrom(src => src.Personalizations));

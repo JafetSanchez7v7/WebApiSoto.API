@@ -12,6 +12,7 @@ namespace WebApiSoto.Application.Common.DTOs.PersonalizedProduct
         public int CustomerId { get; set; }
         public string CustomerName { get; set; }
         public int ProductId { get; set; }
+        public string ProductName { get; set; }
         public string? Description { get; set; }
         public DateTime CreationDate { get; set; }
         public decimal SalePrice { get; set; }
