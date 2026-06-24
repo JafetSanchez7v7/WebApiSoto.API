@@ -69,6 +69,18 @@ namespace WebApiSoto.Infrastructure.Repositories
 
             return await query.CountAsync(ct);
         }
+        
+        // Agregar nuevo
+        public async Task UpdateAsync(Order order, CancellationToken ct)
+        {
+            var oldDetails = _context.OrderDetails.Where(x => x.OrderId == order.OrderId);
+            _context.OrderDetails.RemoveRange(oldDetails);
+            _context.Orders.Update(order);
+        }
+        public async Task<int> CountAsync(CancellationToken ct)
+        {
+            return await _context.Orders.CountAsync(ct);
+        }
         public async Task<IEnumerable<Order>> GetAll(FilterOrderDto dto, CancellationToken ct)
         {
             var query = _context.Orders.AsNoTracking().
